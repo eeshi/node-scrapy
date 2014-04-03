@@ -1,0 +1,8 @@
+{
+  "requestOptions": {},
+  "cheerioOptions": {},
+  "itemOptions": {
+    "nodeProperty": "textContent",
+    "required": false
+  }
+}
