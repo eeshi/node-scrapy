@@ -136,7 +136,7 @@ function parseItem($, item, options, callback) {
   }
 
   if (!data && itemOptions['required']) {
-    return callback(new Error('Item set as REQUIRED and NOT found').stack);
+    return callback(new Error('Item [' + itemOptions.selector + '] set as REQUIRED and NOT found').stack);
   }
 
   return callback(null, data);
