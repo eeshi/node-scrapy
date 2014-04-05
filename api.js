@@ -3,11 +3,11 @@ var cheerio = require('cheerio');
 var DEFAULTS = require('./defaults.json')
 var api = {};
 
-api.scrap = scrap;
+api.scrape = scrape;
 module.exports = api;
 
 
-function scrap(url, model, options, callback) {
+function scrape(url, model, options, callback) {
 
   var reqOptions = DEFAULTS.requestOptions;
 
@@ -21,16 +21,19 @@ function scrap(url, model, options, callback) {
       return callback(err);
     }
 
-    parseBody(data.body, model, function(err, data) {
-
-      if (err) {
-        return callback(err);
-      }
-
-      return callback(null, data);  
-
-    });
+    parseBody(data.body, model, onParseBody);
+    
   });
+
+  function onParseBody(err, data) {
+
+    if (err) {
+      return callback(err);
+    }
+
+    return callback(null, data);  
+
+  }
 };
 
 
