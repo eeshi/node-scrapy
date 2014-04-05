@@ -1,6 +1,10 @@
 {
   "requestOptions": {},
-  "cheerioOptions": {},
+  "cheerioOptions": {
+    "normalizeWhitespace": true,
+    "xmlMode": false,
+    "lowerCaseTags": false
+  },
   "itemOptions": {
     "nodeProperty": "textContent",
     "required": false
