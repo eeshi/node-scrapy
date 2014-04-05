@@ -64,9 +64,11 @@ function getBody(options, callback) {
 function parseBody(body, model, callback) {
 
   var parsedItems = {};
+  var cheerioOptions = DEFAULTS.cheerioOptions;
+  var $;
 
   try {
-    var $ = cheerio.load(body);
+    $ = cheerio.load(body, cheerioOptions);
   } catch (err) {
     return callback(err);
   }
@@ -129,12 +131,12 @@ function parseItem($, item, options, callback) {
       data = null;
       break;
     case 1:
-      data = item.eq(0);
+      data = item['text']();
       break;
     default:
       data = item.map(function() {
-        return $(this);
-      });
+        return $(this)['text']();
+      }).get();
       break;
   }
 
