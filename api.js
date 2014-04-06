@@ -12,7 +12,9 @@ function scrape(url, model, options, callback) {
 
   var reqOptions = utils.clone(DEFAULTS.requestOptions);
 
-  reqOptions = utils.mergeOptions(options, reqOptions);
+  if (typeof options.requestOptions !== 'undefined') {
+    reqOptions = utils.mergeOptions(options.requestOptions, reqOptions);
+  }
 
   reqOptions.uri = url;
 
@@ -23,7 +25,7 @@ function scrape(url, model, options, callback) {
     }
 
     parseBody(data.body, model, onParseBody);
-    
+
   });
 
   function onParseBody(err, data) {
@@ -32,7 +34,7 @@ function scrape(url, model, options, callback) {
       return callback(err);
     }
 
-    return callback(null, data);  
+    return callback(null, data);
 
   }
 };
