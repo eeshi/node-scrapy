@@ -6,7 +6,7 @@
     "lowerCaseTags": false
   },
   "itemOptions": {
-    "nodeProperty": "textContent",
+    "get": "text",
     "required": false
   }
 }
