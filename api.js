@@ -131,27 +131,31 @@ function parseItem(item, options, callback) {
     itemOptions.selector = options;
   }
 
-  switch (objLength) {
-    case 0:
-      data = null;
-      break;
-    case 1:
-      data = (itemOptions.get === 'text')
-        ? item.text()
-        : item.attr(itemOptions.get);
-      break;
-    default:
-      data = [];
+  if (objLength === 0) {
+    data = null;
+  } else {
+    data = [];
 
-      get = (itemOptions.get === 'text')
-        ? function(item) { return item.text(); }
-        : function(item) { return item.attr(itemOptions.get); }
+    get = (itemOptions.get === 'text')
+      ? function(item) { return item.text(); }
+      : function(item) { return item.attr(itemOptions.get); }
 
-      for (var i = objLength - 1; i >= 0; i--) {
-        data[i] = get(item.eq(i));
-      }
+    for (var i = objLength - 1; i >= 0; i--) {
+      data[i] = get(item.eq(i));
+    }
 
-      break;
+    switch (itemOptions.multi) {
+      case true:
+        break;
+      case false:
+        data = data[0];
+        break;
+      case 'auto':
+        if (objLength === 1) {
+          data = data[0];
+        }
+        break;
+    }
   }
 
   if (!data && itemOptions['required']) {
