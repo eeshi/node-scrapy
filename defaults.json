@@ -7,6 +7,7 @@
   },
   "itemOptions": {
     "get": "text",
-    "required": false
+    "required": false,
+    "multi": "auto"
   }
 }
