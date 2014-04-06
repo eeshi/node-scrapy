@@ -1,5 +1,6 @@
 var request = require('request');
 var cheerio = require('cheerio');
+var utils = require('./utils.js');
 var DEFAULTS = require('./defaults.json')
 var api = {};
 
@@ -9,9 +10,9 @@ module.exports = api;
 
 function scrape(url, model, options, callback) {
 
-  var reqOptions = DEFAULTS.requestOptions;
+  var reqOptions = utils.clone(DEFAULTS.requestOptions);
 
-  reqOptions = mergeOptions(options, reqOptions);
+  reqOptions = utils.mergeOptions(options, reqOptions);
 
   reqOptions.uri = url;
 
@@ -64,7 +65,7 @@ function getBody(options, callback) {
 function parseBody(body, model, callback) {
 
   var parsedItems = {};
-  var cheerioOptions = DEFAULTS.cheerioOptions;
+  var cheerioOptions = utils.clone(DEFAULTS.cheerioOptions);
   var $;
 
   try {
@@ -74,13 +75,14 @@ function parseBody(body, model, callback) {
   }
 
   for (var item in model) {
-    getItem($, model[item], function(err, data){
+
+    getItem($, model[item], function(err, data) {
 
       if (err) {
         return callback(err);
       }
 
-      parseItem($, data, model[item], function(err, data){
+      parseItem(data, model[item], function(err, data){
 
         if (err) {
           return callback(err);
@@ -114,14 +116,15 @@ function getItem($, query, callback) {
 
 }
 
-function parseItem($, item, options, callback) {
+function parseItem(item, options, callback) {
 
-  var data = {};
+  var data;
+  var get;
   var objLength = item.length;
-  var itemOptions = DEFAULTS.itemOptions;
+  var itemOptions = utils.clone(DEFAULTS.itemOptions);
 
   if (typeof options === 'object') {
-    itemOptions = mergeOptions(options, itemOptions);
+    itemOptions = utils.mergeOptions(options, itemOptions);
   } else {
     itemOptions.selector = options;
   }
@@ -131,12 +134,21 @@ function parseItem($, item, options, callback) {
       data = null;
       break;
     case 1:
-      data = item['text']();
+      data = (itemOptions.get === 'text')
+        ? item.text()
+        : item.attr(itemOptions.get);
       break;
     default:
-      data = item.map(function() {
-        return $(this)['text']();
-      }).get();
+      data = [];
+
+      get = (itemOptions.get === 'text')
+        ? function(item) { return item.text(); }
+        : function(item) { return item.attr(itemOptions.get); }
+
+      for (var i = objLength - 1; i >= 0; i--) {
+        data[i] = get(item.eq(i));
+      }
+
       break;
   }
 
@@ -146,14 +158,4 @@ function parseItem($, item, options, callback) {
 
   return callback(null, data);
 
-}
-
-
-function mergeOptions(from, to) {
-
-  for (var attr in from) {
-    to[attr] = from[attr];
-  }
-
-  return to;
 }
