@@ -137,8 +137,8 @@ function parseItem(item, options, callback) {
     data = [];
 
     get = (itemOptions.get === 'text')
-      ? function(item) { return item.text(); }
-      : function(item) { return item.attr(itemOptions.get); }
+      ? function(item) { return itemOptions.prefix + item.text() + itemOptions.suffix; }
+      : function(item) { return itemOptions.prefix + item.attr(itemOptions.get) + itemOptions.suffix; }
 
     for (var i = objLength - 1; i >= 0; i--) {
       data[i] = get(item.eq(i));
