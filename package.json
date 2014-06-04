@@ -19,6 +19,7 @@
     "url": "http://github.com/eeshi/node-scrapy/issues"
   },
   "license": "MIT",
+  "readmeFilename": "README.md",
   "engines": [
     "node >= 0.8.0"
   ],
