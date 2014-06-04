@@ -1,0 +1,30 @@
+{
+  "name": "node-scrapy",
+  "description": "Simple, lightweight and expressive web scraping with Node.js",
+  "tags": [
+    "web",
+    "html",
+    "scraping",
+    "scrape",
+    "scraper",
+    "scrapy"
+  ],
+  "version": "0.1.0",
+  "author": "eeshi",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/eeshi/node-scrapy.git"
+  },
+  "bugs": {
+    "url": "http://github.com/eeshi/node-scrapy/issues"
+  },
+  "license": "MIT",
+  "engines": [
+    "node >= 0.8.0"
+  ],
+  "main": "index.js",
+  "dependencies": {
+    "request": "~2.36.0",
+    "cheerio": "~0.16.0"
+  }
+}
