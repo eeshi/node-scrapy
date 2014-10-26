@@ -7,7 +7,14 @@ var scrapy = {};
 scrapy.scrape = scrape;
 module.exports = scrapy;
 
-
+/**
+ * Scrape a web page
+ * @param  {String}   url           Valid URL to scrape
+ * @param  {Object}   model         Literal object describing the data to extracted from the given page
+ * @param  {Object}   [options={}]  Aditional options for request and cheerio
+ * @param  {Function} cb            Standard nodejs callback
+ * @return {null}
+ */
 function scrape(url, model, options, cb) {
 
   if ('function' === typeof options) {
