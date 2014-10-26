@@ -2,10 +2,10 @@ var request = require('request');
 var cheerio = require('cheerio');
 var utils = require('./utils.js');
 var DEFAULTS = require('./defaults.json');
-var api = {};
+var scrapy = {};
 
-api.scrape = scrape;
-module.exports = api;
+scrapy.scrape = scrape;
+module.exports = scrapy;
 
 
 function scrape(url, model, options, cb) {
