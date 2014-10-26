@@ -10,6 +10,11 @@ module.exports = api;
 
 function scrape(url, model, options, cb) {
 
+  if ('function' === typeof options) {
+    cb = options;
+    options = {};
+  }
+
   var reqOptions = utils.clone(DEFAULTS.requestOptions);
 
   if (typeof options.requestOptions !== 'undefined') {
