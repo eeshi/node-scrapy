@@ -1,7 +1,7 @@
 var request = require('request');
 var cheerio = require('cheerio');
 var utils = require('./utils.js');
-var DEFAULTS = require('./defaults.json')
+var DEFAULTS = require('./defaults.json');
 var api = {};
 
 api.scrape = scrape;
@@ -37,7 +37,7 @@ function scrape(url, model, options, cb) {
     return cb(null, data);
 
   }
-};
+}
 
 
 function getBody(options, cb) {
@@ -138,7 +138,7 @@ function parseItem(item, options, cb) {
 
     get = (itemOptions.get === 'text')
       ? function(item) { return itemOptions.prefix + item.text() + itemOptions.suffix; }
-      : function(item) { return itemOptions.prefix + item.attr(itemOptions.get) + itemOptions.suffix; }
+      : function(item) { return itemOptions.prefix + item.attr(itemOptions.get) + itemOptions.suffix; };
 
     for (var i = objLength - 1; i >= 0; i--) {
       data[i] = get(item.eq(i));
@@ -158,7 +158,7 @@ function parseItem(item, options, cb) {
     }
   }
 
-  if (!data && itemOptions['required']) {
+  if (!data && itemOptions.required) {
     return cb(new Error('Item [' + itemOptions.selector + '] set as REQUIRED and NOT found').stack);
   }
 
@@ -166,11 +166,11 @@ function parseItem(item, options, cb) {
 
 }
 
-function parseCookies (request) {
+function parseCookies(request) {
     var list = {},
         rc = request.headers.cookie;
 
-    rc && rc.split(';').forEach(function( cookie ) {
+    rc && rc.split(';').forEach(function(cookie) {
         var parts = cookie.split('=');
         list[parts.shift().trim()] = unescape(parts.join('='));
     });
