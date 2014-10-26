@@ -8,7 +8,7 @@ api.scrape = scrape;
 module.exports = api;
 
 
-function scrape(url, model, options, callback) {
+function scrape(url, model, options, cb) {
 
   var reqOptions = utils.clone(DEFAULTS.requestOptions);
 
@@ -21,7 +21,7 @@ function scrape(url, model, options, callback) {
   getBody(reqOptions, function(err, data) {
 
     if (err) {
-      return callback(err);
+      return cb(err);
     }
 
     parseBody(data.body, model, onParseBody);
@@ -31,23 +31,23 @@ function scrape(url, model, options, callback) {
   function onParseBody(err, data) {
 
     if (err) {
-      return callback(err);
+      return cb(err);
     }
 
-    return callback(null, data);
+    return cb(null, data);
 
   }
 };
 
 
-function getBody(options, callback) {
+function getBody(options, cb) {
 
   var data = {};
 
   request(options, function(err, res, body) {
 
     if (err) {
-      return callback(err);
+      return cb(err);
     }
 
     if (res.statusCode === 200) {
@@ -55,16 +55,16 @@ function getBody(options, callback) {
       data.res = res;
       data.body = body;
 
-      return callback(null, data);
+      return cb(null, data);
 
     }
 
-    return callback(new Error('NOT OK response.').stack);
+    return cb(new Error('NOT OK response.').stack);
 
   });
 }
 
-function parseBody(body, model, callback) {
+function parseBody(body, model, cb) {
 
   var parsedItems = {};
   var cheerioOptions = utils.clone(DEFAULTS.cheerioOptions);
@@ -73,7 +73,7 @@ function parseBody(body, model, callback) {
   try {
     $ = cheerio.load(body, cheerioOptions);
   } catch (err) {
-    return callback(err);
+    return cb(err);
   }
 
   for (var item in model) {
@@ -81,13 +81,13 @@ function parseBody(body, model, callback) {
     getItem($, model[item], function(err, data) {
 
       if (err) {
-        return callback(err);
+        return cb(err);
       }
 
       parseItem(data, model[item], function(err, data){
 
         if (err) {
-          return callback(err);
+          return cb(err);
         }
 
         parsedItems[item] = data;
@@ -97,11 +97,11 @@ function parseBody(body, model, callback) {
     });
   }
 
-  return callback(null, parsedItems);
+  return cb(null, parsedItems);
 
 }
 
-function getItem($, query, callback) {
+function getItem($, query, cb) {
 
   var result;
   var selector;
@@ -114,11 +114,11 @@ function getItem($, query, callback) {
 
   result = $(selector);
 
-  return callback(null, result);
+  return cb(null, result);
 
 }
 
-function parseItem(item, options, callback) {
+function parseItem(item, options, cb) {
 
   var data;
   var get;
@@ -159,10 +159,10 @@ function parseItem(item, options, callback) {
   }
 
   if (!data && itemOptions['required']) {
-    return callback(new Error('Item [' + itemOptions.selector + '] set as REQUIRED and NOT found').stack);
+    return cb(new Error('Item [' + itemOptions.selector + '] set as REQUIRED and NOT found').stack);
   }
 
-  return callback(null, data);
+  return cb(null, data);
 
 }
 
