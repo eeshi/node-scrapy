@@ -1,11 +1,65 @@
+/**
+ * Module dependencies
+ */
+
 var request = require('request');
 var cheerio = require('cheerio');
 var utils = require('./utils.js');
-var DEFAULTS = require('./defaults.json');
-var scrapy = {};
+var _ = require('./lodash.custom.js');
 
+/**
+ * A bunch of handy defaults.
+ * @type { Object }
+ */
+
+var DEFAULTS = require('./defaults.json');
+
+/**
+ * Expose `scrapy` and its `scrape()` method.
+ */
+
+var scrapy = {};
 scrapy.scrape = scrape;
-module.exports = scrapy;
+module.exports = exports = scrapy;
+
+/**
+ * Add `defaultsDeep` method to lodash (`_`),
+ * a recursive defaults loader.
+ *
+ * @param { Object } destination  The destination object
+ * @param { Object } source       The source object
+ *
+ * @example
+ *
+ * var DEFAULTS = {
+ *   likes: ['javascript'],
+ *   active: false,
+ *   org: 'eeshi',
+ *   mainProject: {
+ *     name: 'node-scrapy',
+ *     org: 'esshi'
+ *   }
+ * }
+ *
+ * var sam = {
+ *   name: 'Sam',
+ *   likes: ['html','css'],
+ *   active: true,
+ *   mainProject: {
+ *     name: 'supervisor'
+ *   }
+ * }
+ *
+ * _.defaultsDeep(sam, DEFAULTS) // {name:"Sam",likes:["html","css"],active:true,mainProject:{name:"supervisor",org:"esshi"},org:"eeshi"}
+ *
+ * sam.mainProject === DEFAULTS.mainProject // false
+ */
+
+_.mixin({
+  'defaultsDeep': _.partialRight(_.merge, function deep(value, other) {
+      return _.merge(value, other, deep);
+    })
+});
 
 /**
  * Scrape a web page
@@ -15,22 +69,36 @@ module.exports = scrapy;
  * @param  {Function} cb            Standard nodejs callback
  * @return {null}
  */
+
 function scrape(url, model, options, cb) {
 
+  /**
+   * Make `options` argument optional
+   */
+
   if ('function' === typeof options) {
+
     cb = options;
-    options = {};
+    options = _cloneDeep(DEFAULTS);
+
+  } else {
+
+    /**
+     * Merge all options from `DEFAULTS` not present in `options`
+     */
+
+    _.defaultsDeep(options, DEFAULTS);
+
   }
 
-  var reqOptions = utils.clone(DEFAULTS.requestOptions);
+  /**
+   * Set `request`'s Uniform Resource Identifier to provied `url`
+   * @type {String}
+   */
 
-  if (typeof options.requestOptions !== 'undefined') {
-    reqOptions = utils.mergeOptions(options.requestOptions, reqOptions);
-  }
+  options.requestOptions.uri = url;
 
-  reqOptions.uri = url;
-
-  getBody(reqOptions, function(err, data) {
+  getBody(options.requestOptions, function(err, data) {
 
     if (err) {
       return cb(err);
@@ -56,7 +124,7 @@ function getBody(options, cb) {
 
   var data = {};
 
-  request(options, function(err, res, body) {
+  request(options, function processResponse(err, res, body) {
 
     if (err) {
       return cb(err);
