@@ -4,7 +4,6 @@
 
 var request = require('request');
 var cheerio = require('cheerio');
-var utils = require('./utils.js');
 var _ = require('./lodash.custom.js');
 
 /**
@@ -79,7 +78,7 @@ function scrape(url, model, options, cb) {
   if ('function' === typeof options) {
 
     cb = options;
-    options = _cloneDeep(DEFAULTS);
+    options = _.cloneDeep(DEFAULTS);
 
   } else {
 
@@ -98,150 +97,111 @@ function scrape(url, model, options, cb) {
 
   options.requestOptions.uri = url;
 
-  getBody(options.requestOptions, function(err, data) {
 
-    if (err) {
-      return cb(err);
+  request(options.requestOptions, processResponse);
+
+  function processResponse(err, res, body) {
+
+    if (err) { return cb(err); }
+
+    if (res.statusCode !== 200) {
+      return cb(new Error({
+        message: 'Not OK response from server.',
+        response: res,
+        body: body
+      }));
     }
 
-    parseBody(data.body, model, onParseBody);
-
-  });
+    parseBody(body, model, options, onParseBody);
+  }
 
   function onParseBody(err, data) {
 
-    if (err) {
-      return cb(err);
-    }
+    if (err) { return cb(err); }
 
     return cb(null, data);
 
   }
 }
 
+function parseBody(body, model, options, cb) {
 
-function getBody(options, cb) {
-
-  var data = {};
-
-  request(options, function processResponse(err, res, body) {
-
-    if (err) {
-      return cb(err);
-    }
-
-    if (res.statusCode === 200) {
-
-      data.res = res;
-      data.body = body;
-
-      return cb(null, data);
-
-    }
-
-    return cb(new Error('NOT OK response.').stack);
-
-  });
-}
-
-function parseBody(body, model, cb) {
-
-  var parsedItems = {};
-  var cheerioOptions = utils.clone(DEFAULTS.cheerioOptions);
-  var $;
+  var result = {};
+  var err;
+  var dom;
 
   try {
-    $ = cheerio.load(body, cheerioOptions);
+    dom = cheerio.load(body, options.cheerioOptions);
   } catch (err) {
     return cb(err);
   }
 
   for (var item in model) {
-
-    getItem($, model[item], function(err, data) {
-
-      if (err) {
-        return cb(err);
-      }
-
-      parseItem(data, model[item], function(err, data){
-
-        if (err) {
-          return cb(err);
-        }
-
-        parsedItems[item] = data;
-
-      });
-
-    });
+    result[item] = getItem(dom, model[item], options.itemOptions, chainError);
   }
 
-  return cb(null, parsedItems);
-
-}
-
-function getItem($, query, cb) {
-
-  var result;
-  var selector;
-
-  if (typeof query === 'string') {
-    selector = query;
-  } else if (typeof query === 'object') {
-    selector = query.selector;
+  function chainError(error) {
+    err = error;
   }
 
-  result = $(selector);
+  if (err) { return cb(err); }
 
   return cb(null, result);
 
 }
 
-function parseItem(item, options, cb) {
+
+function getItem(dom, item, defaults, callOnError) {
 
   var data;
   var get;
-  var objLength = item.length;
-  var itemOptions = utils.clone(DEFAULTS.itemOptions);
+  var nodes;
+  var selector;
 
-  if (typeof options === 'object') {
-    itemOptions = utils.mergeOptions(options, itemOptions);
+  if ('string' === typeof item) {
+    selector = item;
+    item = {};
   } else {
-    itemOptions.selector = options;
+    selector = item.selector;
   }
 
-  if (objLength === 0) {
+  _.defaultsDeep(item, defaults);
+
+  nodes = dom(selector);
+
+  if (!nodes.length) {
     data = null;
   } else {
     data = [];
 
-    get = (itemOptions.get === 'text')
-      ? function(item) { return itemOptions.prefix + item.text() + itemOptions.suffix; }
-      : function(item) { return itemOptions.prefix + item.attr(itemOptions.get) + itemOptions.suffix; };
+    get = (item.get === 'text')
+      ? function(node) { return item.prefix + node.text() + item.suffix; }
+      : function(node) { return item.prefix + node.attr(item.get) + item.suffix; };
 
-    for (var i = objLength - 1; i >= 0; i--) {
-      data[i] = get(item.eq(i));
+    for (var i = nodes.length - 1; i >= 0; i--) {
+      data[i] = get(nodes.eq(i));
     }
 
-    switch (itemOptions.multi) {
+    switch (item.multi) {
       case true:
         break;
       case false:
         data = data[0];
         break;
       case 'auto':
-        if (objLength === 1) {
+        if (nodes.length === 1) {
           data = data[0];
         }
         break;
     }
   }
 
-  if (!data && itemOptions.required) {
-    return cb(new Error('Item [' + itemOptions.selector + '] set as REQUIRED and NOT found').stack);
+  if (!data && item.required) {
+    return callOnError(new Error({
+      message: 'Item [' + selector + '] set as REQUIRED and NOT found'
+    }));
   }
 
-  return cb(null, data);
+  return data;
 
 }
