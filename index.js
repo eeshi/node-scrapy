@@ -120,14 +120,7 @@ function scrape(url, model, options, cb) {
       }));
     }
 
-    parseBody(body, model, options, onParseBody);
-  }
-
-  function onParseBody(err, data) {
-
-    if (err) { return cb(err); }
-
-    return cb(null, data);
+    parseBody(body, model, options, cb);
 
   }
 }
@@ -135,7 +128,6 @@ function scrape(url, model, options, cb) {
 function parseBody(body, model, options, cb) {
 
   var result = {};
-  var err;
   var dom;
 
   try {
@@ -145,21 +137,16 @@ function parseBody(body, model, options, cb) {
   }
 
   for (var item in model) {
-    result[item] = getItem(dom, model[item], options.itemOptions, chainError);
+    result[item] = getItem(dom, model[item], options.itemOptions);
+    if (result[item] instanceof Error) { return cb(result[item]); }
   }
-
-  function chainError(error) {
-    err = error;
-  }
-
-  if (err) { return cb(err); }
 
   return cb(null, result);
 
 }
 
 
-function getItem(dom, item, defaults, callOnError) {
+function getItem(dom, item, defaults) {
 
   var data;
   var get;
@@ -205,9 +192,9 @@ function getItem(dom, item, defaults, callOnError) {
   }
 
   if (!data && item.required) {
-    return callOnError(new Error({
+    return new Error({
       message: 'Item [' + selector + '] set as REQUIRED and NOT found'
-    }));
+    });
   }
 
   return data;
