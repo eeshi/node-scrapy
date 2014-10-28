@@ -28,6 +28,8 @@ module.exports = exports = scrapy;
  * @param { Object } destination  The destination object
  * @param { Object } source       The source object
  *
+ * @return { Object }             The `destination` object with new properties
+ *
  * @example
  *
  * var DEFAULTS = {
@@ -49,9 +51,11 @@ module.exports = exports = scrapy;
  *   }
  * }
  *
- * _.defaultsDeep(sam, DEFAULTS) // {name:"Sam",likes:["html","css"],active:true,mainProject:{name:"supervisor",org:"esshi"},org:"eeshi"}
+ * _.defaultsDeep(sam, DEFAULTS)
+ * // {name:"Sam",likes:["html","css"],active:true,mainProject:{name:"supervisor",org:"esshi"},org:"eeshi"}
  *
- * sam.mainProject === DEFAULTS.mainProject // false
+ * sam.mainProject === DEFAULTS.mainProject
+ * // false
  */
 
 _.mixin({
@@ -76,6 +80,10 @@ function scrape(url, model, options, cb) {
    */
 
   if ('function' === typeof options) {
+
+    /**
+     * Interchange `cb`'s position and fill `options` with nice defaults
+     */
 
     cb = options;
     options = _.cloneDeep(DEFAULTS);
