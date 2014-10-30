@@ -8,7 +8,7 @@ var _ = require('./lodash.custom.js');
 
 /**
  * A bunch of handy defaults.
- * @type { Object }
+ * @type {Object}
  */
 
 var DEFAULTS = require('./defaults.json');
@@ -25,10 +25,10 @@ module.exports = exports = scrapy;
  * Add `defaultsDeep` method to lodash (`_`),
  * a recursive defaults loader.
  *
- * @param { Object } destination  The destination object
- * @param { Object } source       The source object
+ * @param {Object} destination  The destination object
+ * @param {Object} source       The source object
  *
- * @return { Object }             The `destination` object with new properties
+ * @return {Object}             The `destination` object with new properties
  *
  * @example
  *
@@ -66,7 +66,7 @@ _.mixin({
 
 /**
  * Scrape a web page
- * @param  {String}   url           Valid URL to scrape
+ * @param  {string}   url           Valid URL to scrape
  * @param  {Object}   model         Literal object describing the data to extracted from the given page
  * @param  {Object}   [options={}]  Aditional options for request and cheerio
  * @param  {Function} cb            Standard nodejs callback
@@ -100,13 +100,20 @@ function scrape(url, model, options, cb) {
 
   /**
    * Set `request`'s Uniform Resource Identifier to provied `url`
-   * @type {String}
+   * @type {string}
    */
 
   options.requestOptions.uri = url;
 
+  /**
+   * Call `request()` to get the resource
+   */
 
   request(options.requestOptions, processResponse);
+
+  /**
+   * Handle `request()`'s result: Chain `err` or proceed to parse the resource.
+   */
 
   function processResponse(err, res, body) {
 
@@ -125,26 +132,60 @@ function scrape(url, model, options, cb) {
   }
 }
 
-function parseBody(body, model, options, cb) {
+/**
+ * Parse the HTML in search of each item in `model`
+ * @param  {string}   bodyString  HTML content
+ * @param  {Object}   model       Data model
+ * @param  {Object}   options     Item defaults
+ * @param  {Function}   cb        Callback
+ * @return {null}
+ */
+
+function parseBody(bodyString, model, options, cb) {
 
   var result = {};
   var dom;
 
+  /**
+   * Load the HTML and parse it with cheerio to create a DOM
+   */
+  
   try {
-    dom = cheerio.load(body, options.cheerioOptions);
+    dom = cheerio.load(bodyString, options.cheerioOptions);
   } catch (err) {
+    err.bodyString = bodyString;
     return cb(err);
   }
 
   for (var item in model) {
+    
     result[item] = getItem(dom, model[item], options.itemOptions);
-    if (result[item] instanceof Error) { return cb(result[item]); }
+
+    /**
+     * If an item produces an `Error`, chain the error to `cb`
+     * e.g. when `required` is set to `true` and the element does't exists
+     *
+     * It will attach the body string to the `Error` object
+     */
+    
+    if (result[item] instanceof Error) {
+      result[item].bodyString = bodyString;
+      return cb(result[item]);
+    }
+
   }
 
   return cb(null, result);
 
 }
 
+/**
+ * Given a `dom`, traverse it to get the desired item
+ * @param  {Object}           dom       cheerio object
+ * @param  {(string|object)}  item      Can be a string holding the `selector` or an Object with multiple options, including `selector`
+ * @param  {Object}           defaults  Default options tha fullfill `item`'s unset options
+ * @return {string|string[]|Error}      Returns a string or an array of strings with the result... or Error
+ */
 
 function getItem(dom, item, defaults) {
 
@@ -153,6 +194,11 @@ function getItem(dom, item, defaults) {
   var nodes;
   var selector;
 
+  /**
+   * If the `item` itself is a selector, grab it as `selector` and set item to
+   * a new empty object, otherwise, the `selector` must be inside `item`.
+   */
+  
   if ('string' === typeof item) {
     selector = item;
     item = {};
@@ -160,11 +206,23 @@ function getItem(dom, item, defaults) {
     selector = item.selector;
   }
 
+  /**
+   * Then fulfill the `item` with nice `defaults`.
+   */
+  
   _.defaultsDeep(item, defaults);
 
+  /**
+   * This is an array of cheerio objects. Always an array.
+   * @type {Object}
+   */
   nodes = dom(selector);
 
   if (!nodes.length) {
+    /**
+     * If there are no matches for the given `selector` set the result as `null`
+     * @type {null}
+     */
     data = null;
   } else {
     data = [];
