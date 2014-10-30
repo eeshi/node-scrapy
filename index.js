@@ -149,7 +149,7 @@ function parseBody(bodyString, model, options, cb) {
   /**
    * Load the HTML and parse it with cheerio to create a DOM
    */
-  
+
   try {
     dom = cheerio.load(bodyString, options.cheerioOptions);
   } catch (err) {
@@ -158,7 +158,7 @@ function parseBody(bodyString, model, options, cb) {
   }
 
   for (var item in model) {
-    
+
     result[item] = getItem(dom, model[item], options.itemOptions);
 
     /**
@@ -167,7 +167,7 @@ function parseBody(bodyString, model, options, cb) {
      *
      * It will attach the body string to the `Error` object
      */
-    
+
     if (result[item] instanceof Error) {
       result[item].bodyString = bodyString;
       return cb(result[item]);
@@ -198,7 +198,7 @@ function getItem(dom, item, defaults) {
    * If the `item` itself is a selector, grab it as `selector` and set item to
    * a new empty object, otherwise, the `selector` must be inside `item`.
    */
-  
+
   if ('string' === typeof item) {
     selector = item;
     item = {};
@@ -209,23 +209,37 @@ function getItem(dom, item, defaults) {
   /**
    * Then fulfill the `item` with nice `defaults`.
    */
-  
+
   _.defaultsDeep(item, defaults);
 
   /**
    * This is an array of cheerio objects. Always an array.
    * @type {Object}
    */
+
   nodes = dom(selector);
 
+  /**
+   * If there are no matches for the given `selector` set the result as `null`
+   * Ohterwise, proceed to process the result.
+   */
+
   if (!nodes.length) {
-    /**
-     * If there are no matches for the given `selector` set the result as `null`
-     * @type {null}
-     */
+
     data = null;
+
   } else {
+
     data = [];
+
+    /**
+     * The text of a node is what you probably are looking for. Scraping is all
+     * about content.
+     * Cheerio has the `.text()` method to get it, this is the default.
+     * If you are looking for something else, it must be an attribute, like a
+     * link's `href` or an image/script's `src` or a form's `method`.
+     * @type {Function}
+     */
 
     get = (item.get === 'text')
       ? function(node) { return item.prefix + node.text() + item.suffix; }
