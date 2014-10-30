@@ -143,7 +143,7 @@ function scrape(url, model, options, cb) {
 
 function parseBody(bodyString, model, options, cb) {
 
-  var result = {};
+  var result;
   var dom;
 
   /**
@@ -157,22 +157,11 @@ function parseBody(bodyString, model, options, cb) {
     return cb(err);
   }
 
-  for (var item in model) {
+  result = getItem(dom, model, options.itemOptions);
 
-    result[item] = getItem(dom, model[item], options.itemOptions);
-
-    /**
-     * If an item produces an `Error`, chain the error to `cb`
-     * e.g. when `required` is set to `true` and the element does't exists
-     *
-     * It will attach the body string to the `Error` object
-     */
-
-    if (result[item] instanceof Error) {
-      result[item].bodyString = bodyString;
-      return cb(result[item]);
-    }
-
+  if (result instanceof Error) {
+    result.bodyString = bodyString;
+    return cb(result);
   }
 
   return cb(null, result);
@@ -182,7 +171,7 @@ function parseBody(bodyString, model, options, cb) {
 /**
  * Given a `dom`, traverse it to get the desired item
  * @param  {Object}           dom       cheerio object
- * @param  {(string|object)}  item      Can be a string holding the `selector` or an Object with multiple options, including `selector`
+ * @param  {(string|object)}  item      Can be a string holding the `selector`, an Object with multiple options, including `selector`, or an embedded Object with no `selector`.
  * @param  {Object}           defaults  Default options tha fullfill `item`'s unset options
  * @return {string|string[]|Error}      Returns a string or an array of strings with the result... or Error
  */
@@ -196,15 +185,40 @@ function getItem(dom, item, defaults) {
 
   /**
    * If the `item` itself is a selector, grab it as `selector` and set item to
-   * a new empty object, otherwise, the `selector` must be inside `item`.
+   * a new empty object.
    */
 
   if ('string' === typeof item) {
+
     selector = item;
     item = {};
-  } else {
-    selector = item.selector;
-  }
+
+  /**
+   * If not, it should be an object.
+   * If it has no `selector`, it means it is an embedded document, so resolve it
+   * recursively.
+   */
+
+  } else if (!item.selector) {
+
+    data = [];
+
+    for (var embedded in item) {
+
+      data[embedded] = getItem(dom, item[embedded], defaults);
+
+      if (data[embedded] instanceof Error) {
+        return data[embedded];
+      }
+    }
+
+    return data;
+
+  /**
+   * If it does have a `selector`, use it!
+   */
+
+  } else { selector = item.selector; }
 
   /**
    * Then fulfill the `item` with nice `defaults`.
