@@ -230,8 +230,6 @@ function getItem(dom, item, defaults) {
 
   } else {
 
-    data = [];
-
     /**
      * The text of a node is what you probably are looking for. Scraping is all
      * about content.
@@ -245,24 +243,45 @@ function getItem(dom, item, defaults) {
       ? function(node) { return item.prefix + node.text() + item.suffix; }
       : function(node) { return item.prefix + node.attr(item.get) + item.suffix; };
 
-    for (var i = nodes.length - 1; i >= 0; i--) {
-      data[i] = get(nodes.eq(i));
-    }
+    /**
+     * When `unique` is set to `true`, only the first match will be returned, no
+     * matter how many elements actually matched the `selector`.
+     * When set to `false`, it will return the results into an array, even when
+     * only one element matched the `selector`.
+     * When set to `'auto'`, (scrapy's default) an unwrapped result will bereturned
+     * when a single element matched the `selector`, an array if many.
+     */
 
-    switch (item.multi) {
+    switch (item.unique) {
+
       case true:
+
+        data = get(nodes.eq(0));
         break;
-      case false:
-        data = data[0];
-        break;
+
       case 'auto':
+
         if (nodes.length === 1) {
-          data = data[0];
+          data = get(nodes.eq(0));
+          break;
         }
+
+      case false:
+
+        data = [];
+
+        for (var i = nodes.length - 1; i >= 0; i--) {
+          data[i] = get(nodes.eq(i));
+        }
+
         break;
     }
   }
 
+  /**
+   * When no element is found for the given `selector` but it was explicitly
+   * `required`, return an `Error` instead of `data`.
+   */
   if (!data && item.required) {
     return new Error({
       message: 'Item [' + selector + '] set as REQUIRED and NOT found'

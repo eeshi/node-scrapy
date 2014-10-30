@@ -8,7 +8,7 @@
   "itemOptions": {
     "get": "text",
     "required": false,
-    "multi": "auto",
+    "unique": "auto",
     "prefix": "",
     "suffix": ""
   }
