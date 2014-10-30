@@ -196,15 +196,40 @@ function getItem(dom, item, defaults) {
 
   /**
    * If the `item` itself is a selector, grab it as `selector` and set item to
-   * a new empty object, otherwise, the `selector` must be inside `item`.
+   * a new empty object.
    */
 
   if ('string' === typeof item) {
+
     selector = item;
     item = {};
-  } else {
-    selector = item.selector;
-  }
+
+  /**
+   * If not, it should be an object.
+   * If it has no `selector`, it means it is an embedded document, so resolve it
+   * recursively.
+   */
+
+  } else if (!item.selector) {
+
+    data = [];
+
+    for (var embedded in item) {
+
+      data[embedded] = getItem(dom, item[embedded], defaults);
+
+      if (data[embedded] instanceof Error) {
+        return data[embedded];
+      }
+    }
+
+    return data;
+
+  /**
+   * If it does have a `selector`, use it!
+   */
+
+  } else { selector = item.selector; }
 
   /**
    * Then fulfill the `item` with nice `defaults`.
