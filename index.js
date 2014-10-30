@@ -1,179 +1,293 @@
+/**
+ * Module dependencies
+ */
+
 var request = require('request');
 var cheerio = require('cheerio');
-var utils = require('./utils.js');
-var DEFAULTS = require('./defaults.json')
-var api = {};
+var _ = require('./lodash.custom.js');
 
-api.scrape = scrape;
-module.exports = api;
+/**
+ * A bunch of handy defaults.
+ * @type {Object}
+ */
 
+var DEFAULTS = require('./defaults.json');
 
-function scrape(url, model, options, callback) {
+/**
+ * Expose `scrapy` and its `scrape()` method.
+ */
 
-  var reqOptions = utils.clone(DEFAULTS.requestOptions);
+var scrapy = {};
+scrapy.scrape = scrape;
+module.exports = exports = scrapy;
 
-  if (typeof options.requestOptions !== 'undefined') {
-    reqOptions = utils.mergeOptions(options.requestOptions, reqOptions);
+/**
+ * Add `defaultsDeep` method to lodash (`_`),
+ * a recursive defaults loader.
+ *
+ * @param {Object} destination  The destination object
+ * @param {Object} source       The source object
+ *
+ * @return {Object}             The `destination` object with new properties
+ *
+ * @example
+ *
+ * var DEFAULTS = {
+ *   likes: ['javascript'],
+ *   active: false,
+ *   org: 'eeshi',
+ *   mainProject: {
+ *     name: 'node-scrapy',
+ *     org: 'esshi'
+ *   }
+ * }
+ *
+ * var sam = {
+ *   name: 'Sam',
+ *   likes: ['html','css'],
+ *   active: true,
+ *   mainProject: {
+ *     name: 'supervisor'
+ *   }
+ * }
+ *
+ * _.defaultsDeep(sam, DEFAULTS)
+ * // {name:"Sam",likes:["html","css"],active:true,mainProject:{name:"supervisor",org:"esshi"},org:"eeshi"}
+ *
+ * sam.mainProject === DEFAULTS.mainProject
+ * // false
+ */
+
+_.mixin({
+  'defaultsDeep': _.partialRight(_.merge, function deep(value, other) {
+      return _.merge(value, other, deep);
+    })
+});
+
+/**
+ * Scrape a web page
+ * @param  {string}   url           Valid URL to scrape
+ * @param  {Object}   model         Literal object describing the data to extracted from the given page
+ * @param  {Object}   [options={}]  Aditional options for request and cheerio
+ * @param  {Function} cb            Standard nodejs callback
+ * @return {null}
+ */
+
+function scrape(url, model, options, cb) {
+
+  /**
+   * Make `options` argument optional
+   */
+
+  if ('function' === typeof options) {
+
+    /**
+     * Interchange `cb`'s position and fill `options` with nice defaults
+     */
+
+    cb = options;
+    options = _.cloneDeep(DEFAULTS);
+
+  } else {
+
+    /**
+     * Merge all options from `DEFAULTS` not present in `options`
+     */
+
+    _.defaultsDeep(options, DEFAULTS);
+
   }
 
-  reqOptions.uri = url;
+  /**
+   * Set `request`'s Uniform Resource Identifier to provied `url`
+   * @type {string}
+   */
 
-  getBody(reqOptions, function(err, data) {
+  options.requestOptions.uri = url;
 
-    if (err) {
-      return callback(err);
+  /**
+   * Call `request()` to get the resource
+   */
+
+  request(options.requestOptions, processResponse);
+
+  /**
+   * Handle `request()`'s result: Chain `err` or proceed to parse the resource.
+   */
+
+  function processResponse(err, res, body) {
+
+    if (err) { return cb(err); }
+
+    if (res.statusCode !== 200) {
+      return cb(new Error({
+        message: 'Not OK response from server.',
+        response: res,
+        body: body
+      }));
     }
 
-    parseBody(data.body, model, onParseBody);
-
-  });
-
-  function onParseBody(err, data) {
-
-    if (err) {
-      return callback(err);
-    }
-
-    return callback(null, data);
+    parseBody(body, model, options, cb);
 
   }
-};
-
-
-function getBody(options, callback) {
-
-  var data = {};
-
-  request(options, function(err, res, body) {
-
-    if (err) {
-      return callback(err);
-    }
-
-    if (res.statusCode === 200) {
-
-      data.res = res;
-      data.body = body;
-
-      return callback(null, data);
-
-    }
-
-    return callback(new Error('NOT OK response.').stack);
-
-  });
 }
 
-function parseBody(body, model, callback) {
+/**
+ * Parse the HTML in search of each item in `model`
+ * @param  {string}   bodyString  HTML content
+ * @param  {Object}   model       Data model
+ * @param  {Object}   options     Item defaults
+ * @param  {Function}   cb        Callback
+ * @return {null}
+ */
 
-  var parsedItems = {};
-  var cheerioOptions = utils.clone(DEFAULTS.cheerioOptions);
-  var $;
+function parseBody(bodyString, model, options, cb) {
+
+  var result = {};
+  var dom;
+
+  /**
+   * Load the HTML and parse it with cheerio to create a DOM
+   */
 
   try {
-    $ = cheerio.load(body, cheerioOptions);
+    dom = cheerio.load(bodyString, options.cheerioOptions);
   } catch (err) {
-    return callback(err);
+    err.bodyString = bodyString;
+    return cb(err);
   }
 
   for (var item in model) {
 
-    getItem($, model[item], function(err, data) {
+    result[item] = getItem(dom, model[item], options.itemOptions);
 
-      if (err) {
-        return callback(err);
-      }
+    /**
+     * If an item produces an `Error`, chain the error to `cb`
+     * e.g. when `required` is set to `true` and the element does't exists
+     *
+     * It will attach the body string to the `Error` object
+     */
 
-      parseItem(data, model[item], function(err, data){
+    if (result[item] instanceof Error) {
+      result[item].bodyString = bodyString;
+      return cb(result[item]);
+    }
 
-        if (err) {
-          return callback(err);
-        }
-
-        parsedItems[item] = data;
-
-      });
-
-    });
   }
 
-  return callback(null, parsedItems);
+  return cb(null, result);
 
 }
 
-function getItem($, query, callback) {
+/**
+ * Given a `dom`, traverse it to get the desired item
+ * @param  {Object}           dom       cheerio object
+ * @param  {(string|object)}  item      Can be a string holding the `selector` or an Object with multiple options, including `selector`
+ * @param  {Object}           defaults  Default options tha fullfill `item`'s unset options
+ * @return {string|string[]|Error}      Returns a string or an array of strings with the result... or Error
+ */
 
-  var result;
-  var selector;
-
-  if (typeof query === 'string') {
-    selector = query;
-  } else if (typeof query === 'object') {
-    selector = query.selector;
-  }
-
-  result = $(selector);
-
-  return callback(null, result);
-
-}
-
-function parseItem(item, options, callback) {
+function getItem(dom, item, defaults) {
 
   var data;
   var get;
-  var objLength = item.length;
-  var itemOptions = utils.clone(DEFAULTS.itemOptions);
+  var nodes;
+  var selector;
 
-  if (typeof options === 'object') {
-    itemOptions = utils.mergeOptions(options, itemOptions);
+  /**
+   * If the `item` itself is a selector, grab it as `selector` and set item to
+   * a new empty object, otherwise, the `selector` must be inside `item`.
+   */
+
+  if ('string' === typeof item) {
+    selector = item;
+    item = {};
   } else {
-    itemOptions.selector = options;
+    selector = item.selector;
   }
 
-  if (objLength === 0) {
+  /**
+   * Then fulfill the `item` with nice `defaults`.
+   */
+
+  _.defaultsDeep(item, defaults);
+
+  /**
+   * This is an array of cheerio objects. Always an array.
+   * @type {Object}
+   */
+
+  nodes = dom(selector);
+
+  /**
+   * If there are no matches for the given `selector` set the result as `null`
+   * Ohterwise, proceed to process the result.
+   */
+
+  if (!nodes.length) {
+
     data = null;
+
   } else {
-    data = [];
 
-    get = (itemOptions.get === 'text')
-      ? function(item) { return itemOptions.prefix + item.text() + itemOptions.suffix; }
-      : function(item) { return itemOptions.prefix + item.attr(itemOptions.get) + itemOptions.suffix; }
+    /**
+     * The text of a node is what you probably are looking for. Scraping is all
+     * about content.
+     * Cheerio has the `.text()` method to get it, this is the default.
+     * If you are looking for something else, it must be an attribute, like a
+     * link's `href` or an image/script's `src` or a form's `method`.
+     * @type {Function}
+     */
 
-    for (var i = objLength - 1; i >= 0; i--) {
-      data[i] = get(item.eq(i));
-    }
+    get = (item.get === 'text')
+      ? function(node) { return item.prefix + node.text() + item.suffix; }
+      : function(node) { return item.prefix + node.attr(item.get) + item.suffix; };
 
-    switch (itemOptions.multi) {
+    /**
+     * When `unique` is set to `true`, only the first match will be returned, no
+     * matter how many elements actually matched the `selector`.
+     * When set to `false`, it will return the results into an array, even when
+     * only one element matched the `selector`.
+     * When set to `'auto'`, (scrapy's default) an unwrapped result will bereturned
+     * when a single element matched the `selector`, an array if many.
+     */
+
+    switch (item.unique) {
+
       case true:
+
+        data = get(nodes.eq(0));
         break;
-      case false:
-        data = data[0];
-        break;
+
       case 'auto':
-        if (objLength === 1) {
-          data = data[0];
+
+        if (nodes.length === 1) {
+          data = get(nodes.eq(0));
+          break;
         }
+
+      case false:
+
+        data = [];
+
+        for (var i = nodes.length - 1; i >= 0; i--) {
+          data[i] = get(nodes.eq(i));
+        }
+
         break;
     }
   }
 
-  if (!data && itemOptions['required']) {
-    return callback(new Error('Item [' + itemOptions.selector + '] set as REQUIRED and NOT found').stack);
+  /**
+   * When no element is found for the given `selector` but it was explicitly
+   * `required`, return an `Error` instead of `data`.
+   */
+  if (!data && item.required) {
+    return new Error({
+      message: 'Item [' + selector + '] set as REQUIRED and NOT found'
+    });
   }
 
-  return callback(null, data);
+  return data;
 
-}
-
-function parseCookies (request) {
-    var list = {},
-        rc = request.headers.cookie;
-
-    rc && rc.split(';').forEach(function( cookie ) {
-        var parts = cookie.split('=');
-        list[parts.shift().trim()] = unescape(parts.join('='));
-    });
-
-    return list;
 }
