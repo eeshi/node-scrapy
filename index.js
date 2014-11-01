@@ -201,7 +201,7 @@ function getItem(dom, item, defaults) {
 
   } else if (!item.selector) {
 
-    data = [];
+    data = {};
 
     for (var embedded in item) {
 
