@@ -66,10 +66,10 @@ _.mixin({
 
 /**
  * Scrape a web page
- * @param  {string}   url           Valid URL to scrape
- * @param  {Object}   model         Literal object describing the data to extracted from the given page
- * @param  {Object}   [options={}]  Aditional options for request and cheerio
- * @param  {Function} cb            Standard nodejs callback
+ * @param  {string}           url           Valid URL to scrape
+ * @param  {Object|string}    model         String or object describing the data to be extracted from the given url
+ * @param  {Object}           [options={}]  Aditional options for request and cheerio
+ * @param  {Function}         cb            Standard nodejs callback
  * @return {null}
  */
 
@@ -123,7 +123,7 @@ function scrape(url, model, options, cb) {
       return cb(new Error({
         message: 'Not OK response from server.',
         response: res,
-        body: body
+        bodyString: body
       }));
     }
 
@@ -134,10 +134,10 @@ function scrape(url, model, options, cb) {
 
 /**
  * Parse the HTML in search of each item in `model`
- * @param  {string}   bodyString  HTML content
- * @param  {Object}   model       Data model
- * @param  {Object}   options     Item defaults
- * @param  {Function}   cb        Callback
+ * @param  {string}           bodyString  HTML content
+ * @param  {Object|string}    model       Data model or string
+ * @param  {Object}           options     Item defaults
+ * @param  {Function}         cb          Callback
  * @return {null}
  */
 
@@ -171,8 +171,8 @@ function parseBody(bodyString, model, options, cb) {
 /**
  * Given a `dom`, traverse it to get the desired item
  * @param  {Object}           dom       cheerio object
- * @param  {(string|object)}  item      Can be a string holding the `selector`, an Object with multiple options, including `selector`, or an embedded Object with no `selector`.
- * @param  {Object}           defaults  Default options tha fullfill `item`'s unset options
+ * @param  {(string|Object)}  item      Can be a string holding the `selector`, an Object with multiple options, including `selector`, or an embedded Object with no `selector`.
+ * @param  {Object}           defaults  Default options to fullfill `item`'s unset options
  * @return {string|string[]|Error}      Returns a string or an array of strings with the result... or Error
  */
 
@@ -249,7 +249,7 @@ function getItem(dom, item, defaults) {
      * about content.
      * Cheerio has the `.text()` method to get it, this is the default.
      * If you are looking for something else, it must be an attribute, like a
-     * link's `href` or an image/script's `src` or a form's `method`.
+     * link's `href` or an image/script's `src` or a form's `action`.
      * @type {Function}
      */
 
@@ -262,7 +262,7 @@ function getItem(dom, item, defaults) {
      * matter how many elements actually matched the `selector`.
      * When set to `false`, it will return the results into an array, even when
      * only one element matched the `selector`.
-     * When set to `'auto'`, (scrapy's default) an unwrapped result will bereturned
+     * When set to `'auto'`, (scrapy's default) an unwrapped result will be returned
      * when a single element matched the `selector`, an array if many.
      */
 
