@@ -68,3 +68,44 @@ Scrapy will return:
      'index.js',
      'package.json' ] }
 ```
+
+## Install
+
+```bash
+npm install node-scrapy
+```
+
+## Features
+
+__⚡ Lightweight:__ Scrapy relies only on [cheerio](https://www.npmjs.org/package/cheerio), [request](https://www.npmjs.org/package/request), and a [Lo-Dash custom build](https://lodash.com/custom-builds), all known for being fast.
+
+__Expressive__: No XPaths. No complex object inheritance. No extensive config files. Just JSON and the CSS selector you're used to.
+
+## Limitations
+
+Scrapy wraps [cheerio](https://www.npmjs.org/package/cheerio) and [request](https://www.npmjs.org/package/request) to parse HTML files over the wire. Cheerio can't parse javascript nor Scrapy will, so with server-side rendered pages Scrapy may not behave as one would expect. You can always check this by visiting the page with your favorite browser and 
+
+## API
+
+So far, scrapy exposes only one method:
+
+### .scrape( url, model, [options,] callback )
+
+### url
+
+### model
+
+### options
+
+#### options.itemOptions
+
+#### options.cheerioOptions
+
+#### options.requestOptions
+
+### callback
+
+## Contributing
+
+## License
+
