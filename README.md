@@ -76,18 +76,18 @@ npm install node-scrapy
 ```
 
 ## Features
-__○ Simple__: No XPaths. No complex object inheritance. No extensive config files. Just JSON and the CSS selector you're used to.
+🍠 __Simple__: No XPaths. No complex object inheritance. No extensive config files. Just JSON and the CSS selector you're used to. Simple as [potatoes](http://youtu.be/efMHLkyb7ho).
 
-__⚡ Lightweight:__ Scrapy relies only on [cheerio](https://www.npmjs.org/package/cheerio), [request](https://www.npmjs.org/package/request), and a [Lo-Dash custom build](https://lodash.com/custom-builds), all known for being fast.
+⚡ __Lightweight:__ Scrapy relies only on [cheerio](https://www.npmjs.org/package/cheerio), [request](https://www.npmjs.org/package/request), and a [Lo-Dash custom build](https://lodash.com/custom-builds), all known for being fast.
 
-📢 __Expressive:__ It's easy to talk to Scrapy. It will assume a lot of handy defaults to get what you actually meant. If Scrapy fails, you still can correct it by its [options](#optionsitemoptions).
+📢 __Expressive:__ It's easy to talk to Scrapy. It will assume a lot of handy defaults to get what you actually meant to get. If Scrapy fails, you still can correct it by its [options](#optionsitemoptions).
 
 
 ## Limitations
 
-Scrapy wraps [cheerio](https://www.npmjs.org/package/cheerio) and [request](https://www.npmjs.org/package/request) to parse HTML files over the wire. Cheerio can't parse javascript and neither will Scrapy, so with server-side rendered pages Scrapy may not behave as one would expect. You can always check this by visiting the page with your favorite browser and javascript disabled.
+Scrapy wraps [cheerio](https://www.npmjs.org/package/cheerio) and [request](https://www.npmjs.org/package/request) to parse HTML files over the wire. Cheerio can't parse javascript and neither will Scrapy, so with client-side-rendered pages Scrapy may not behave as one would expect. You can always check this by visiting the page with your favorite browser and javascript disabled.
 
-If the page you're trying to scrape is client-side rendered, you can still change the HTTP user-agent to let the server know it is a machine and, if lucky, the server will return a non-AJAX version of the page. You may check [this list of bots' user-agents](http://user-agent-string.info/list-of-ua/bots) and configure Scrapy through its [request options](#optionsrequestoptions) to present itself as a bot.
+If the page you're trying to scrape is client-side-rendered, you can still change the HTTP user-agent to let the server know it is a machine and, if lucky, the server will return a non-AJAX version of the page. You may check [this list of bots' user-agents](http://user-agent-string.info/list-of-ua/bots) and configure Scrapy through its [request options](#optionsrequestoptions) to present itself as a bot.
 
 ## API
 
