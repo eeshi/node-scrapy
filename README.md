@@ -187,6 +187,20 @@ _Heads up!_ - if no single element matched the `selector`, the result will alway
 
 Default: `'auto'`
 
+##### trim
+
+Trims the result, before any other tramsformation, like `prefix`/`suffix`.
+
+`false`: will not trim.
+
+`'left'`: trim left.
+
+`'right'`: trim right.
+
+`true`: will trim both sides.
+
+Default: `true`
+
 ##### prefix
 
 A `string` to be prefixed to the result(s). Useful to transform relative URLs into absolute ones.
