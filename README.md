@@ -79,7 +79,7 @@ If the page you're trying to scrape is client-side-rendered, you still can chang
 
 ## API
 
-So far, scrapy exposes only one method:
+So far, Scrapy exposes only one method:
 
 ### .scrape( url, model, [options,] callback )
 
@@ -120,7 +120,7 @@ scrapy.scrape(url, model, console.log)
 */
 ```
 
-or nested objects with embeded [options](#optionsitemoptions) for each item, in which case the `selector` key holding the [CSS selector](#selector) is a must:
+or nested objects with embeded [options](#optionsitemoptions) for each item, in which case the `selector` key holding a [CSS selector](#selector) is a must:
 
 ```js
 var url = 'https://www.npmjs.org/package/mocha'
@@ -143,30 +143,100 @@ scrapy.scrape(url, model, console.log)
 */
 ```
 
-
 ### options
+
+This is an optional `Object`. It lets you set request's options, cheerio's load options, and/or your own default options for every item passed into the `model`.
+
+You can always look at Scrapy's defaults into the [defaults.json](./defaults.json) file.
 
 #### options.itemOptions
 
+_Important:_ the following options can be set in a per-item basis inside the `model`. Setting these options into `options.itemOptions` will simply overwrite the defaults used for the current `.scrape()` call.
+
 ##### selector
+
+A `string` representing a CSS selector. It must be compilant with [CSSselector's supported selectors](https://github.com/fb55/CSSselect#supported-selectors).
 
 ##### get
 
+Part of the selected element(s) to retrieve.
+
+`'text'`: the DOM equivalent of [`Node.textContent`](https://developer.mozilla.org/en-US/docs/Web/API/Node.textContent).
+
+`'{attribute}'`: gets the value of the given `attribute`. e.g. `'src'`, '`href`', `'disabled'`, etc.
+
+Default: `'text'`
+
 ##### required
+
+`false`: nothing happens.
+
+`true`: Scrapy will stop and call back with an `Error` as first argument if no element in the page matches the `selector`. `err.bodyString` holds the entire HTTP response body for debugging purposes.
+
+Default: `false`
 
 ##### unique
 
+_Heads up!_ - if no single element matched the `selector`, the result will always be `null`; except when [`required`](#required) is set to `true`, in which case calls back with an `Error`.
+
+`'auto'`: if a single element matched the `selector`, a `string` will be returned with its result. If many elements matched the selector, will return an `Array` of strings holding the result of each element.
+
+`true`: will return a single `string`, no matter if many elements matched the `selector`. Only the first one will be taken.
+
+`false`: even if a single element matched the `selector`, it will be returned boxed into an `Array`.
+
+Default: `'auto'`
+
 ##### prefix
+
+A `string` to be prefixed to the result(s). Useful to transform relative URLs into absolute ones.
+
+Default: `''` (empty string)
 
 ##### suffix
 
+A `string` to be appended to the result(s).
+
+Default: `''` (empty string)
+
 #### options.cheerioOptions
+
+These options are passed to cheerio on load. You can check all available options in [htmlparser2's wiki](https://github.com/fb55/htmlparser2/wiki/Parser-options) (in which cheerio relies).
+
+Scrapy's default `cheerioOptions` are the following:
+
+```json
+{
+  "normalizeWhitespace": true,
+  "xmlMode": false,
+  "lowerCaseTags": false
+}
+```
+
+As a reminder: you can always look at Scrapy's defaults into the [defaults.json](./defaults.json) file.
 
 #### options.requestOptions
 
+These options are passed directly to request's options.
+
+Some useful options include: `encoding: 'binary'` for old sites without character encoding declaration (try it if you're getting strange chars), authorization options (HTTP, Oauth, etc), proxies, SSL, cookies, among others.
+
 ### callback
+
+A callback `Funtion` that follows the NodeJS error-first callback convention.
+
+```js
+function(err, data) {
+    if (err) return console.error(err) // Handle error
+    console.log(data) // Do something with data
+}
+```
 
 ## Contributing
 
+Scrapy is in an early stage, we would love you to involve in its development! Go ahead and open a [new issue](https://github.com/eeshi/node-scrapy/issues).
+
 ## License
+
+ __❤__ [MIT](./LICENSE)
 
