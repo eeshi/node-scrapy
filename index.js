@@ -180,6 +180,7 @@ function getItem(dom, item, defaults) {
 
   var data;
   var get;
+  var trim;
   var nodes;
   var selector;
 
@@ -245,6 +246,25 @@ function getItem(dom, item, defaults) {
   } else {
 
     /**
+     * Configure the `trim` function based on the item.trim options.
+     * If `false`, simply return the same value.
+     */
+    switch (item.trim) {
+      case true:
+        trim = String.prototype.trim;
+        break;
+      case false:
+        trim = function() { return this; };
+        break;
+      case 'left':
+        trim = String.prototype.trimLeft;
+        break;
+      case 'right':
+        trim = String.prototype.trimRight;
+        break;
+    }
+
+    /**
      * The text of a node is what you probably are looking for. Scraping is all
      * about content.
      * Cheerio has the `.text()` method to get it, this is the default.
@@ -254,8 +274,8 @@ function getItem(dom, item, defaults) {
      */
 
     get = (item.get === 'text')
-      ? function(node) { return item.prefix + node.text() + item.suffix; }
-      : function(node) { return item.prefix + node.attr(item.get) + item.suffix; };
+      ? function(node) { return item.prefix + trim.apply(node.text()) + item.suffix; }
+      : function(node) { return item.prefix + trim.apply(node.attr(item.get)) + item.suffix; };
 
     /**
      * When `unique` is set to `true`, only the first match will be returned, no

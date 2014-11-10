@@ -9,6 +9,7 @@
     "get": "text",
     "required": false,
     "unique": "auto",
+    "trim": true,
     "prefix": "",
     "suffix": ""
   }
