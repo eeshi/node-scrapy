@@ -36,7 +36,7 @@ var scrapy = require('node-scrapy')
             forks: '.fork-button + .social-count' } },
       files: '.js-directory-link' }
 
-scrapy.scrape(url, selector, function(err, data) {
+scrapy.scrape(url, model, function(err, data) {
     if (err) return console.error(err)
     console.log(data)
 });
@@ -68,7 +68,7 @@ npm install node-scrapy
 
 ⚡ __Lightweight:__ Scrapy relies only on [cheerio](https://www.npmjs.org/package/cheerio), [request](https://www.npmjs.org/package/request), and a [Lo-Dash custom build](https://lodash.com/custom-builds), all known for being fast.
 
-📢 __Expressive:__ It's easy to talk to Scrapy. It will assume a lot of handy defaults to get what you actually meant to get. If Scrapy fails, you still can correct it by its [options](#optionsitemoptions).
+📢 __Expressive:__ It's easy to talk to Scrapy. It will assume a lot of handy defaults to get what you actually meant to get. If Scrapy misunderstands, you can try to express yourself better using its [options](#optionsitemoptions).
 
 
 ## Limitations
