@@ -155,7 +155,7 @@ _Important:_ the following options can be set in a per-item basis inside the `mo
 
 ##### selector
 
-A `string` representing a CSS selector. It must be compilant with [CSSselector's supported selectors](https://github.com/fb55/CSSselect#supported-selectors).
+A `string` representing a CSS selector. It must be compliant with [CSSselector's supported selectors](https://github.com/fb55/CSSselect#supported-selectors).
 
 ##### get
 
