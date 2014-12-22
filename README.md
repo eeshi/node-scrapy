@@ -237,7 +237,7 @@ Some useful options include: `encoding: 'binary'` for old sites without characte
 
 ### callback
 
-A callback `Funtion` that follows the NodeJS error-first callback convention.
+A callback `Function` that follows the NodeJS error-first callback convention.
 
 ```js
 function(err, data) {
