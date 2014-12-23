@@ -24,7 +24,7 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "request": "~2.46.0",
-    "cheerio": "~0.18.0"
+    "cheerio": "~0.18.0",
+    "request": "^2.46.0"
   }
 }
