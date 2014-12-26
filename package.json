@@ -1,7 +1,7 @@
 {
   "name": "node-scrapy",
   "description": "Simple, lightweight and expressive web scraping with Node.js",
-  "tags": [
+  "keywords": [
     "web",
     "html",
     "scraping",
