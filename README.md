@@ -246,6 +246,17 @@ function(err, data) {
 }
 ```
 
+## Alternatives
+
+Here some alternative nodejs-based solutions similar to node-scrapy (in popularity order):
+
+* [node-crawler](https://github.com/sylvinus/node-crawler)
+* [node-scraper](https://github.com/mape/node-scraper)
+* [skim](https://github.com/tcr/skim)
+* [wscraper](https://github.com/kalise/wscraper)
+* [html-scrapper](https://github.com/harish2704/html-scrapper)
+* [scrapy](https://github.com/orkz/scrapy)
+
 ## Contributing
 
 Scrapy is in an early stage, we would love you to involve in its development! Go ahead and open a [new issue](https://github.com/eeshi/node-scrapy/issues).
