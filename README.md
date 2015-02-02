@@ -93,7 +93,7 @@ It can be either a `string` with the [CSS selector](#selector) of the element(s)
 
 ```js
 var url = 'https://www.npmjs.org/package/mocha'
-  , model = '.description'
+  , model = '.package-description'
 
 scrapy.scrape(url, model, console.log)
 
@@ -104,19 +104,19 @@ scrapy.scrape(url, model, console.log)
 or an `object` whose enumerable properties hold [CSS selectors](#selector):
 
 ```js
-var url = 'https://www.npmjs.org/package/mocha'
-  , model = { description: '.description', maintainers: '.username' }
+var url = 'https://www.npmjs.org/package/mocha'  
+  , model = { description: '.package-description', keywords: 'h3:contains(Keywords) + p a' }
 
 scrapy.scrape(url, model, console.log)
 
 /*
   { description: 'simple, flexible, fun test framework',
-    maintainers: 
-     [ 'travisjeffery',
-       'tjholowaychuk',
-       'travisjeffery',
-       'jbnicolai',
-       'boneskull' ] }
+    keywords: 
+     [ 'mocha',
+       'test',
+       'bdd',
+       'tdd',
+       'tap' ] }
 */
 ```
 
@@ -124,9 +124,9 @@ or nested objects with embeded [options](#optionsitemoptions) for each item, in 
 
 ```js
 var url = 'https://www.npmjs.org/package/mocha'
-  , model = { description: { selector: '.description', required: true },
+  , model = { description: { selector: '.package-description', required: true },
               maintainers: 
-              { selector: '.username',
+              { selector: '.humans li a',
                 get: 'href',
                 prefix: 'https://www.npmjs.org' } }
 
