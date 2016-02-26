@@ -201,6 +201,12 @@ Trims the result, before any other tramsformation, like `prefix`/`suffix`.
 
 Default: `true`
 
+##### transform
+
+A `function` applied after all other operations and transformations.
+
+Default: `function() { return this.toString(); }`
+
 ##### prefix
 
 A `string` to be prefixed to the result(s). Useful to transform relative URLs into absolute ones.
