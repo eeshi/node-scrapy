@@ -65,6 +65,19 @@ _.mixin({
 });
 
 /**
+ * Custom Error for node-scrapy
+ */
+function ScrapeError(msg, response, bodyString) {
+  Error.call(this, msg);
+
+  this.response = response;
+  this.bodyString = bodyString;
+}
+
+ScrapeError.prototype = Object.create(Error.prototype);
+ScrapeError.prototype.constructor = ScrapeError;
+
+/**
  * Scrape a web page
  * @param  {string}           url           Valid URL to scrape
  * @param  {Object|string}    model         String or object describing the data to be extracted from the given url
@@ -120,11 +133,7 @@ function scrape(url, model, options, cb) {
     if (err) { return cb(err); }
 
     if (res.statusCode !== 200) {
-      return cb(new Error({
-        message: 'Not OK response from server.',
-        response: res,
-        bodyString: body
-      }));
+      return cb(new ScrapeError('Not OK response from server.', res, body));
     }
 
     parseBody(body, model, options, cb);
@@ -326,9 +335,7 @@ function getItem(dom, item, defaults) {
    * `required`, return an `Error` instead of `data`.
    */
   if (!data && item.required) {
-    return new Error({
-      message: 'Item [' + selector + '] set as REQUIRED and NOT found'
-    });
+    return new Error('Item [' + selector + '] set as REQUIRED and NOT found');
   }
 
   return data;
