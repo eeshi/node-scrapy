@@ -22,7 +22,7 @@
   "homepage": "https://github.com/eeshi/node-scrapy",
   "readmeFilename": "README.md",
   "engines": [
-    "node >= 0.8.0"
+    "node >= 4.0.0"
   ],
   "main": "index.js",
   "dependencies": {
