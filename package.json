@@ -30,8 +30,10 @@
   ],
   "main": "index.js",
   "dependencies": {
-    "cheerio": "~0.19.0",
-    "request": "^2.46.0"
+    "css-select": "^1.2.0",
+    "htmlparser2": "^3.9.2",
+    "lodash.isplainobject": "^4.0.6",
+    "lodash.isstring": "^4.0.1"
   },
   "devDependencies": {
     "echint": "^2.1.1",
