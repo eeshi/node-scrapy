@@ -111,7 +111,7 @@ scrapy.scrape(url, model, console.log)
 
 /*
   { description: 'simple, flexible, fun test framework',
-    keywords: 
+    keywords:
      [ 'mocha',
        'test',
        'bdd',
@@ -125,7 +125,7 @@ or nested objects with embeded [options](#optionsitemoptions) for each item, in 
 ```js
 var url = 'https://www.npmjs.org/package/mocha'
   , model = { description: { selector: '.package-description', required: true },
-              maintainers: 
+              maintainers:
               { selector: '.humans li a',
                 get: 'href',
                 prefix: 'https://www.npmjs.org' } }
@@ -134,7 +134,7 @@ scrapy.scrape(url, model, console.log)
 
 /*
   { description: 'simple, flexible, fun test framework',
-    maintainers: 
+    maintainers:
      [ 'https://www.npmjs.org/~travisjeffery',
        'https://www.npmjs.org/~tjholowaychuk',
        'https://www.npmjs.org/~travisjeffery',
@@ -270,4 +270,3 @@ Scrapy is in an early stage, we would love you to involve in its development! Go
 ## License
 
  __❤__ [MIT](./LICENSE)
-
