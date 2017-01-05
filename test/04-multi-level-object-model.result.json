@@ -1,0 +1,10 @@
+{
+  "pageDetails": {
+    "pageTitle": "Multi Level Objects",
+    "pageHeading": "Main Page Heading"
+  },
+  "mainContent": {
+    "mainParagraph": "Main Paragraph",
+    "secondParagraph": "Second Paragraph"
+  }
+}

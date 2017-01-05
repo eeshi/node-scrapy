@@ -1,0 +1,11 @@
+{
+  "pageDetails": {
+    "pageTitle": "Multi Level Objects with Array",
+    "pageHeading": "Main Page Heading"
+  },
+  "mainContent": {
+    "mainParagraph": "Main Paragraph",
+    "secondParagraph": "Second Paragraph",
+    "links": ["Paragraph", "lots", "and scrapy should catch them all"]
+  }
+}

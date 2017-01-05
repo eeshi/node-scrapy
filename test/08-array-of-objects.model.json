@@ -1,0 +1,10 @@
+{
+  "list-title": "title",
+  "people": [".person",
+    {
+      "name": ".name",
+      "birthday": ".birthday",
+      "languages": [":parent ul > li"]
+    }
+  ]
+}

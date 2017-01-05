@@ -1,0 +1,10 @@
+{
+  "pageDetails": {
+    "pageTitle": "title",
+    "pageHeading": "h1"
+  },
+  "mainContent": {
+    "mainParagraph": ".main-p",
+    "secondParagraph": ".second-p"
+  }
+}

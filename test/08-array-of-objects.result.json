@@ -1,0 +1,15 @@
+{
+  "list-title": "Array of Objects",
+  "people": [
+    {
+      "name": "Stefan",
+      "birthday": "1694-03-29",
+      "languages": ["shell", "javascript", "german"]
+    },
+    {
+      "name": "Adrian",
+      "birthday": "1718-12-03",
+      "languages": ["rust", "javascript", "italian"]
+    }
+  ]
+}
