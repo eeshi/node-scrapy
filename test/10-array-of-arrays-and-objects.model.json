@@ -1,0 +1,11 @@
+{
+  "list-title": "title",
+  "polygons": [".polygon",
+    [".points > li",
+      {
+        "x": "strong:first-child",
+        "y": "strong:last-child"
+      }
+    ]
+  ]
+}
