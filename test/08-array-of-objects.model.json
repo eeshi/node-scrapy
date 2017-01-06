@@ -4,7 +4,7 @@
     {
       "name": ".name",
       "birthday": ".birthday",
-      "languages": [":parent ul > li"]
+      "languages": [".language-list li"]
     }
   ]
 }
