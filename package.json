@@ -2,8 +2,12 @@
   "name": "node-scrapy",
   "description": "Simple, lightweight and expressive web scraping with Node.js",
   "eslintConfig": {
-    "plugins": ["standard"],
-    "extends": ["standard"]
+    "plugins": [
+      "standard"
+    ],
+    "extends": [
+      "standard"
+    ]
   },
   "keywords": [
     "web",
@@ -16,7 +20,7 @@
     "scrapy",
     "crawler"
   ],
-  "version": "0.3.0",
+  "version": "0.4.0-alpha.0",
   "author": "Stefan Maric <me@stefanmaric.com>",
   "repository": "eeshi/node-scrapy",
   "bugs": {
