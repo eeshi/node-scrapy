@@ -55,12 +55,10 @@ function getItem (dom, item) {
   if (utils.isPlainObject(item)) {
     data = {}
     for (let key in item) data[key] = getItem(dom, item[key])
-    return data
-  }
-
-  if (utils.isArray(item)) {
+  } else if (utils.isArray(item)) {
     matches = cssSelect.selectAll(item[0], dom)
-    if (utils.isPlainObject(item[1])) {
+
+    if (utils.isArray(item[1]) || utils.isPlainObject(item[1])) {
       data = matches.map(context => getItem(context, item[1]))
     } else {
       data = matches.map(getTextContent)
