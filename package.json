@@ -32,7 +32,7 @@
   "engines": [
     "node >= 4.0.0"
   ],
-  "main": "index.js",
+  "main": "lib/index.js",
   "dependencies": {
     "css-select": "^1.2.0",
     "htmlparser2": "^3.9.2",
