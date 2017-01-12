@@ -10,7 +10,7 @@
     "scrapy",
     "crawler"
   ],
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": "Stefan Maric <me@stefanmaric.com>",
   "repository": "eeshi/node-scrapy",
   "bugs": {
