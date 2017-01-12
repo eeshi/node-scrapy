@@ -291,9 +291,14 @@ function getItem(dom, item, defaults) {
      * @type {Function}
      */
 
-    get = (item.get === 'text')
-      ? function(node) { return transform.apply(item.prefix + trim.apply(node.text()) + item.suffix); }
-      : function(node) { return transform.apply(item.prefix + trim.apply(node.attr(item.get)) + item.suffix); };
+    get = (function(i){
+      if (i.get === 'text')
+        return function(node) { return transform.apply(item.prefix + trim.apply(node.text()) + item.suffix); };
+      else if (i.get === 'html') 
+        return function(node) { return transform.apply(item.prefix + trim.apply(node.html()) + item.suffix); };
+      else 
+        return function(node) { return transform.apply(item.prefix + trim.apply(node.attr(item.get)) + item.suffix); };
+    })(item);   
 
     /**
      * When `unique` is set to `true`, only the first match will be returned, no
