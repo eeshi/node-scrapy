@@ -163,7 +163,7 @@ Part of the selected element(s) to retrieve.
 
 `'text'`: the DOM equivalent of [`Node.textContent`](https://developer.mozilla.org/en-US/docs/Web/API/Node.textContent).
 
-`'html'`: gets the content including html tags. The equivalent of Cheerio's [`html`](https://github.com/cheeriojs/cheerio#html-htmlstring-).
+`'html'`: gets the content including html tags. The equivalent of [`Element.innerHTML`](https://developer.mozilla.org/en-US/docs/Web/API/Element/innerHTML).
 
 `'{attribute}'`: gets the value of the given `attribute`. e.g. `'src'`, '`href`', `'disabled'`, etc.
 
