@@ -10,9 +10,9 @@ let model = require(path.join(__dirname, testName + '.model'))
 let expected = require(path.join(__dirname, testName + '.result'))
 
 let test = require('tap').test
-let scrapy = require('..')
+let scrapy = require('../..')
 
-test('textContent should include children\'s textContent, without the actual tags', t => {
+test('arrays with an object as second element should be treated a model and the fist item would be trated as the scope', t => {
   let result = scrapy.extract(source, model)
   t.deepEqual(result, expected)
   t.end()

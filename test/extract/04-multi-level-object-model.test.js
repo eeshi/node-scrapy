@@ -10,9 +10,9 @@ let model = require(path.join(__dirname, testName + '.model'))
 let expected = require(path.join(__dirname, testName + '.result'))
 
 let test = require('tap').test
-let scrapy = require('..')
+let scrapy = require('../..')
 
-test('arrays and objects in the model can be nested at any level', t => {
+test('model and result structures should match', t => {
   let result = scrapy.extract(source, model)
   t.deepEqual(result, expected)
   t.end()

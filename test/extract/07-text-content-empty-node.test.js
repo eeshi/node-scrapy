@@ -10,9 +10,9 @@ let model = require(path.join(__dirname, testName + '.model'))
 let expected = require(path.join(__dirname, testName + '.result'))
 
 let test = require('tap').test
-let scrapy = require('..')
+let scrapy = require('../..')
 
-test('should process object values as selectors and return object with same structure, containing testContent of each selector', t => {
+test('empty nodes and nodes without text children should not break getTextContent', t => {
   let result = scrapy.extract(source, model)
   t.deepEqual(result, expected)
   t.end()

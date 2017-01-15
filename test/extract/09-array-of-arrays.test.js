@@ -10,7 +10,7 @@ let model = require(path.join(__dirname, testName + '.model'))
 let expected = require(path.join(__dirname, testName + '.result'))
 
 let test = require('tap').test
-let scrapy = require('..')
+let scrapy = require('../..')
 
 test('arrays with an array as second element should be treated as nested context', t => {
   let result = scrapy.extract(source, model)

@@ -48,6 +48,6 @@
     "tap": "^8.0.1"
   },
   "scripts": {
-    "test": "echint && eslint . && tap test/*.test.js"
+    "test": "echint && eslint . && tap test/**.test.js"
   }
 }

@@ -10,7 +10,7 @@ let model = require(path.join(__dirname, testName + '.model'))
 let expected = require(path.join(__dirname, testName + '.result'))
 
 let test = require('tap').test
-let scrapy = require('..')
+let scrapy = require('../..')
 
 test('arrays inside nested objects should resolve in the result as array of textContent', t => {
   let result = scrapy.extract(source, model)
