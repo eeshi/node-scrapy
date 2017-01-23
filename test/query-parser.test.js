@@ -17,13 +17,6 @@ test('should return null for `getter` if not present in the query', t => {
   t.end()
 })
 
-test('should return empty array for `filters` if not present in the query', t => {
-  let query = '.home li > a'
-  let result = parse(query)
-  t.same(result.filters, [])
-  t.end()
-})
-
 test('should extract `getter` from query if present', t => {
   let query = '.home li > a => href'
   let result = parse(query)
@@ -39,6 +32,13 @@ test('should ignore whitespace around and in between `getter`', t => {
   t.end()
 })
 
+test('should return empty array for `filters` if not present in the query', t => {
+  let query = '.home li > a'
+  let result = parse(query)
+  t.same(result.filters, [])
+  t.end()
+})
+
 test('should extract filter name', t => {
   let query = '.home li > a | trim'
   let result = parse(query)
@@ -51,5 +51,30 @@ test('should extract all filter names in order', t => {
   let result = parse(query)
   t.strictSame(result.filters[0].name, 'trim')
   t.strictSame(result.filters[1].name, 'normalizeWhitespace')
+  t.end()
+})
+
+test("should extract filters' arguments as strings", t => {
+  let query = '.home li > a | trim:right | someFilter:true | anotherFilter:test'
+  let result = parse(query)
+  t.strictSame(result.filters[0].args[0], 'right')
+  t.strictSame(result.filters[1].args[0], 'true')
+  t.strictSame(result.filters[2].args[0], 'test')
+  t.end()
+})
+
+test('should return empty array for filter arguments if none provided', t => {
+  let query = '.home li > a | trim'
+  let result = parse(query)
+  t.same(result.filters[0].args, [])
+  t.end()
+})
+
+test("should extract all filter's colon-separated arguments as strings in order", t => {
+  let query = '.home li > a | trim:left:right:both'
+  let result = parse(query)
+  t.strictSame(result.filters[0].args[0], 'left')
+  t.strictSame(result.filters[0].args[1], 'right')
+  t.strictSame(result.filters[0].args[2], 'both')
   t.end()
 })
