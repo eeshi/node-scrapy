@@ -14,6 +14,6 @@ let scrapy = require('../..')
 
 test('should process single-array with single-string as a multi-selection query and return array of textContent', t => {
   let result = scrapy.extract(source, model)
-  t.deepEqual(result, expected)
+  t.same(result, expected)
   t.end()
 })

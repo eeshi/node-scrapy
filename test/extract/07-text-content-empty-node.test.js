@@ -14,6 +14,6 @@ let scrapy = require('../..')
 
 test('empty nodes and nodes without text children should not break getTextContent', t => {
   let result = scrapy.extract(source, model)
-  t.deepEqual(result, expected)
+  t.same(result, expected)
   t.end()
 })

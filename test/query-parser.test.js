@@ -20,7 +20,7 @@ test('should return null for `getter` if not present in the query', t => {
 test('should return empty array for `filters` if not present in the query', t => {
   let query = '.home li > a'
   let result = parse(query)
-  t.deepEqual(result.filters, [])
+  t.same(result.filters, [])
   t.end()
 })
 

@@ -14,6 +14,6 @@ let scrapy = require('../..')
 
 test('model and result structures should match', t => {
   let result = scrapy.extract(source, model)
-  t.deepEqual(result, expected)
+  t.same(result, expected)
   t.end()
 })

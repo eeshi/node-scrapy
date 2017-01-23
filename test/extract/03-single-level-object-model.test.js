@@ -14,6 +14,6 @@ let scrapy = require('../..')
 
 test('should process object values as selectors and return object with same structure, containing testContent of each selector', t => {
   let result = scrapy.extract(source, model)
-  t.deepEqual(result, expected)
+  t.same(result, expected)
   t.end()
 })

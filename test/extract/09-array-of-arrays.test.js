@@ -14,6 +14,6 @@ let scrapy = require('../..')
 
 test('arrays with an array as second element should be treated as nested context', t => {
   let result = scrapy.extract(source, model)
-  t.deepEqual(result, expected)
+  t.same(result, expected)
   t.end()
 })

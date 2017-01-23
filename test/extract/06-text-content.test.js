@@ -14,6 +14,6 @@ let scrapy = require('../..')
 
 test('textContent should include children\'s textContent, without the actual tags', t => {
   let result = scrapy.extract(source, model)
-  t.deepEqual(result, expected)
+  t.same(result, expected)
   t.end()
 })

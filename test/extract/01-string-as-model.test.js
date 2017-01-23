@@ -14,6 +14,6 @@ let scrapy = require('../..')
 
 test('should process single-string models as selector and return a string containing its textContent', t => {
   let result = scrapy.extract(source, model)
-  t.deepEqual(result, expected)
+  t.same(result, expected)
   t.end()
 })

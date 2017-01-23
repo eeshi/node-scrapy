@@ -14,6 +14,6 @@ let scrapy = require('../..')
 
 test('arrays inside nested objects should resolve in the result as array of textContent', t => {
   let result = scrapy.extract(source, model)
-  t.deepEqual(result, expected)
+  t.same(result, expected)
   t.end()
 })

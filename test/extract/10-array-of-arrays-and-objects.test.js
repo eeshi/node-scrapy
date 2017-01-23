@@ -14,6 +14,6 @@ let scrapy = require('../..')
 
 test('arrays and objects in the model can be nested at any level', t => {
   let result = scrapy.extract(source, model)
-  t.deepEqual(result, expected)
+  t.same(result, expected)
   t.end()
 })
