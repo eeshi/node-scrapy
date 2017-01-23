@@ -1,3 +1,5 @@
+'use strict'
+
 let test = require('tap').test
 let parse = require('../lib/query-parser')
 
