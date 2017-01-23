@@ -6,7 +6,28 @@ let parse = require('../lib/query-parser')
 test('should extract CSS selector from query and keep it intact', t => {
   let query = '.home li > a'
   let result = parse(query)
-  t.strictSame(result.selector, query)
+  t.strictSame(result.selector, '.home li > a')
+  t.end()
+})
+
+test('should extract CSS selector from query and keep it intact, even if getter query is present', t => {
+  let query = '.home li > a => $text'
+  let result = parse(query)
+  t.strictSame(result.selector, '.home li > a')
+  t.end()
+})
+
+test('should extract CSS selector from query and keep it intact, even if filter query is present', t => {
+  let query = '.home li > a | trim:both'
+  let result = parse(query)
+  t.strictSame(result.selector, '.home li > a')
+  t.end()
+})
+
+test('should extract CSS selector from query and keep it intact, even if getter and filter queries are present', t => {
+  let query = '.home li > a => $text | trim:both'
+  let result = parse(query)
+  t.strictSame(result.selector, '.home li > a')
   t.end()
 })
 
