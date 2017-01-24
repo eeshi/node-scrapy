@@ -1,0 +1,8 @@
+{
+  "pageTitle": "getters",
+  "default": "This Paragraph has lots of links and scrapy will include them depending on getter.",
+  "textContent": "This Paragraph has lots of links and scrapy will include them depending on getter.",
+  "text": "This Paragraph has lots of links and scrapy will include them depending on getter.",
+  "textNodes": "This  has  of links .",
+  "links": ["#link1", "#link2", "#link3"]
+}
