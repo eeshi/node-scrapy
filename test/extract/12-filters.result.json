@@ -1,0 +1,5 @@
+{
+  "pageTitle": "filters",
+  "whitespaceExcess": " This paragraph has a lot of whitespace that should be stripped away . ",
+  "properWhitespace": " This paragraph has intended whitespace what should not be removed because it is no more than one. "
+}

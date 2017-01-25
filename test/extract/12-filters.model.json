@@ -1,0 +1,5 @@
+{
+  "pageTitle": "title",
+  "whitespaceExcess": "p.whitespace-excess => $textContent | normalizeWhitespace",
+  "properWhitespace": "p.proper-whitespace => $textContent | normalizeWhitespace"
+}
