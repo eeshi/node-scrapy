@@ -4,5 +4,8 @@
   "textContent": "This Paragraph has lots of links and scrapy will include them depending on getter.",
   "text": "This Paragraph has lots of links and scrapy will include them depending on getter.",
   "textNodes": "This  has  of links .",
-  "links": ["#link1", "#link2", "#link3"]
+  "links": ["#link1", "#link2", "#link3"],
+  "outerHTML": "<p class=\"main-p\">This <a href=\"#link1\">Paragraph</a> has <a href=\"#link2\">lots</a> of links <a href=\"#link3\">and scrapy will include them depending on getter</a>.</p>",
+  "html": "<p class=\"main-p\">This <a href=\"#link1\">Paragraph</a> has <a href=\"#link2\">lots</a> of links <a href=\"#link3\">and scrapy will include them depending on getter</a>.</p>",
+  "innerHTML": "This <a href=\"#link1\">Paragraph</a> has <a href=\"#link2\">lots</a> of links <a href=\"#link3\">and scrapy will include them depending on getter</a>."
 }

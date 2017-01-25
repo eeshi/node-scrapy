@@ -35,3 +35,19 @@ test('should return matching attribute if getter is not one of the getters colle
   t.same(result.links, expected.links)
   t.end()
 })
+
+test('$outerHTML should return outer HTML of selected element', t => {
+  t.strictSame(result.outerHTML, expected.outerHTML)
+  t.end()
+})
+
+test('$html should be an alias for $outerHTML', t => {
+  t.strictSame(result.html, expected.html)
+  t.strictSame(result.html, expected.outerHTML)
+  t.end()
+})
+
+test('$innerHTML should return inner HTML of selected element', t => {
+  t.strictSame(result.innerHTML, expected.innerHTML)
+  t.end()
+})
