@@ -1,5 +1,9 @@
 {
   "pageTitle": "title",
   "whitespaceExcess": "p.whitespace-excess => $textContent | normalizeWhitespace",
-  "properWhitespace": "p.proper-whitespace => $textContent | normalizeWhitespace"
+  "properWhitespace": "p.proper-whitespace => $textContent | normalizeWhitespace",
+  "trimRight": ".extra-leading-and-trailing-space => $textContent | trim:right",
+  "trimLeft": ".extra-leading-and-trailing-space => $textContent | trim:left",
+  "trimBoth": ".extra-leading-and-trailing-space => $textContent | trim:both",
+  "trimAlone": ".extra-leading-and-trailing-space => $textContent | trim"
 }
