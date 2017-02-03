@@ -5,5 +5,9 @@
   "trimRight": ".extra-leading-and-trailing-space => $textContent | trim:right",
   "trimLeft": ".extra-leading-and-trailing-space => $textContent | trim:left",
   "trimBoth": ".extra-leading-and-trailing-space => $textContent | trim:both",
-  "trimAlone": ".extra-leading-and-trailing-space => $textContent | trim"
+  "trimAlone": ".extra-leading-and-trailing-space => $textContent | trim",
+  "prefix": ".incomplete a => href | prefix:www.site.com",
+  "suffix": ".incomplete a => href | suffix:success",
+  "suffixAndPrefix": ".incomplete a => href | suffix:success | prefix:www.site.com",
+  "prefixAndSuffix": ".incomplete a => href | prefix:www.site.com | suffix:success"
 }

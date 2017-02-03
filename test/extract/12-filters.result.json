@@ -5,5 +5,9 @@
   "trimRight": "\n\n\n      This pararaph has both, leading and trailing whitespace.",
   "trimLeft": "This pararaph has both, leading and trailing whitespace.\n\n\n    ",
   "trimBoth": "This pararaph has both, leading and trailing whitespace.",
-  "trimAlone": "This pararaph has both, leading and trailing whitespace."
+  "trimAlone": "This pararaph has both, leading and trailing whitespace.",
+  "prefix": "www.site.com/path/to#",
+  "suffix": "/path/to#success",
+  "suffixAndPrefix": "www.site.com/path/to#success",
+  "prefixAndSuffix": "www.site.com/path/to#success"
 }

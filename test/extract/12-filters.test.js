@@ -44,3 +44,20 @@ test('trim without arguments should default to trim:both', t => {
   t.strictSame(result.trimAlone, result.trimBoth)
   t.end()
 })
+
+test('prefix should prefix text', t => {
+  t.strictSame(result.prefix, expected.prefix)
+  t.end()
+})
+
+test('suffix should suffix text', t => {
+  t.strictSame(result.suffix, expected.suffix)
+  t.end()
+})
+
+test('order of prefix and suffix filters should not matter', t => {
+  t.strictSame(result.prefixAndSuffix, expected.prefixAndSuffix)
+  t.strictSame(result.suffixAndPrefix, expected.suffixAndPrefix)
+  t.strictSame(result.prefixAndSuffix, result.suffixAndPrefix)
+  t.end()
+})
