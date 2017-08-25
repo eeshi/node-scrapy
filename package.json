@@ -49,6 +49,6 @@
     "tap": "^10.0.0"
   },
   "scripts": {
-    "test": "echint && eslint . && tap test/**.test.js test/**/*.test.js"
+    "test": "echint && eslint . && tap 'test/**/*.test.js'"
   }
 }
