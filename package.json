@@ -2,12 +2,25 @@
   "name": "node-scrapy",
   "description": "Simple, lightweight and expressive web scraping with Node.js",
   "eslintConfig": {
-    "plugins": [
+    "extends": [
+      "airbnb",
       "standard"
     ],
-    "extends": [
-      "standard"
-    ]
+    "root": true,
+    "rules": {
+      "max-len": [
+        "error",
+        80,
+        2,
+        {
+          "ignoreComments": false,
+          "ignoreRegExpLiterals": true,
+          "ignoreStrings": true,
+          "ignoreTemplateLiterals": true,
+          "ignoreUrls": true
+        }
+      ]
+    }
   },
   "keywords": [
     "web",
@@ -42,10 +55,15 @@
   },
   "devDependencies": {
     "echint": "^4.0.1",
-    "eslint": "^3.14.1",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^2.0.1",
+    "eslint": "^4.5.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.6.1",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-node": "^5.1.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "eslint-plugin-react": "^7.3.0",
+    "eslint-plugin-standard": "^3.0.1",
     "tap": "^10.0.0"
   },
   "scripts": {
