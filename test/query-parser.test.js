@@ -1,99 +1,97 @@
-'use strict'
+const test = require('tap').test
+const parse = require('../lib/query-parser')
 
-let test = require('tap').test
-let parse = require('../lib/query-parser')
-
-test('should extract CSS selector from query and keep it intact', t => {
-  let query = '.home li > a'
-  let result = parse(query)
+test('should extract CSS selector from query and keep it intact', (t) => {
+  const query = '.home li > a'
+  const result = parse(query)
   t.strictSame(result.selector, '.home li > a')
   t.end()
 })
 
-test('should extract CSS selector from query and keep it intact, even if getter query is present', t => {
-  let query = '.home li > a => $text'
-  let result = parse(query)
+test('should extract CSS selector from query and keep it intact, even if getter query is present', (t) => {
+  const query = '.home li > a => $text'
+  const result = parse(query)
   t.strictSame(result.selector, '.home li > a')
   t.end()
 })
 
-test('should extract CSS selector from query and keep it intact, even if filter query is present', t => {
-  let query = '.home li > a | trim:both'
-  let result = parse(query)
+test('should extract CSS selector from query and keep it intact, even if filter query is present', (t) => {
+  const query = '.home li > a | trim:both'
+  const result = parse(query)
   t.strictSame(result.selector, '.home li > a')
   t.end()
 })
 
-test('should extract CSS selector from query and keep it intact, even if getter and filter queries are present', t => {
-  let query = '.home li > a => $text | trim:both'
-  let result = parse(query)
+test('should extract CSS selector from query and keep it intact, even if getter and filter queries are present', (t) => {
+  const query = '.home li > a => $text | trim:both'
+  const result = parse(query)
   t.strictSame(result.selector, '.home li > a')
   t.end()
 })
 
-test('should return null for `getter` if not present in the query', t => {
-  let query = '.home li > a'
-  let result = parse(query)
+test('should return null for `getter` if not present in the query', (t) => {
+  const query = '.home li > a'
+  const result = parse(query)
   t.strictSame(result.getter, null)
   t.end()
 })
 
-test('should extract `getter` from query if present', t => {
-  let query = '.home li > a => href'
-  let result = parse(query)
+test('should extract `getter` from query if present', (t) => {
+  const query = '.home li > a => href'
+  const result = parse(query)
   t.strictSame(result.getter, 'href')
   t.end()
 })
 
-test('should ignore whitespace around and in between `getter`', t => {
-  let query = `.home li > a =>   hr e
+test('should ignore whitespace around and in between `getter`', (t) => {
+  const query = `.home li > a =>   hr e
     f  `
-  let result = parse(query)
+  const result = parse(query)
   t.strictSame(result.getter, 'href')
   t.end()
 })
 
-test('should return empty array for `filters` if not present in the query', t => {
-  let query = '.home li > a'
-  let result = parse(query)
+test('should return empty array for `filters` if not present in the query', (t) => {
+  const query = '.home li > a'
+  const result = parse(query)
   t.same(result.filters, [])
   t.end()
 })
 
-test('should extract filter name', t => {
-  let query = '.home li > a | trim'
-  let result = parse(query)
+test('should extract filter name', (t) => {
+  const query = '.home li > a | trim'
+  const result = parse(query)
   t.strictSame(result.filters[0].name, 'trim')
   t.end()
 })
 
-test('should extract all filter names in order', t => {
-  let query = '.home li > a | trim | normalizeWhitespace'
-  let result = parse(query)
+test('should extract all filter names in order', (t) => {
+  const query = '.home li > a | trim | normalizeWhitespace'
+  const result = parse(query)
   t.strictSame(result.filters[0].name, 'trim')
   t.strictSame(result.filters[1].name, 'normalizeWhitespace')
   t.end()
 })
 
-test("should extract filters' arguments as strings", t => {
-  let query = '.home li > a | trim:right | someFilter:true | anotherFilter:test'
-  let result = parse(query)
+test("should extract filters' arguments as strings", (t) => {
+  const query = '.home li > a | trim:right | someFilter:true | anotherFilter:test'
+  const result = parse(query)
   t.strictSame(result.filters[0].args[0], 'right')
   t.strictSame(result.filters[1].args[0], 'true')
   t.strictSame(result.filters[2].args[0], 'test')
   t.end()
 })
 
-test('should return empty array for filter arguments if none provided', t => {
-  let query = '.home li > a | trim'
-  let result = parse(query)
+test('should return empty array for filter arguments if none provided', (t) => {
+  const query = '.home li > a | trim'
+  const result = parse(query)
   t.same(result.filters[0].args, [])
   t.end()
 })
 
-test("should extract all filter's colon-separated arguments as strings in order", t => {
-  let query = '.home li > a | trim:left:right:both'
-  let result = parse(query)
+test("should extract all filter's colon-separated arguments as strings in order", (t) => {
+  const query = '.home li > a | trim:left:right:both'
+  const result = parse(query)
   t.strictSame(result.filters[0].args[0], 'left')
   t.strictSame(result.filters[0].args[1], 'right')
   t.strictSame(result.filters[0].args[2], 'both')
