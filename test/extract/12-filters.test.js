@@ -1,61 +1,58 @@
-'use strict'
+const test = require('tap').test
+const scrapy = require('../..')
 
-let fs = require('fs')
-let path = require('path')
+const { getFixtureSet } = require('../test-utils')
 
-let testName = path.basename(__filename, '.test.js')
+const {
+  source,
+  model,
+  expected
+} = getFixtureSet(__dirname, __filename)
 
-let source = fs.readFileSync(path.join(__dirname, testName + '.source.html'), 'utf8')
-let model = require(path.join(__dirname, testName + '.model'))
-let expected = require(path.join(__dirname, testName + '.result'))
+const result = scrapy.extract(source, model)
 
-let test = require('tap').test
-let scrapy = require('../..')
-
-let result = scrapy.extract(source, model)
-
-test('normalizeWhitespace filter should replace 2-or-more consecutive whitespaces occurrences with a single space', t => {
+test('normalizeWhitespace filter should replace 2-or-more consecutive whitespaces occurrences with a single space', (t) => {
   t.strictSame(result.whitespaceExcess, expected.whitespaceExcess)
   t.end()
 })
 
-test('normalizeWhitespace filter should should keep single whitespace ocurrences as they are', t => {
+test('normalizeWhitespace filter should should keep single whitespace ocurrences as they are', (t) => {
   t.strictSame(result.properWhitespace, expected.properWhitespace)
   t.end()
 })
 
-test('trim:right should remove trailing whitespace, and leading whitespace should be preserved', t => {
+test('trim:right should remove trailing whitespace, and leading whitespace should be preserved', (t) => {
   t.strictSame(result.trimRight, expected.trimRight)
   t.end()
 })
 
-test('trim:left should remove leading whitespace, and trailing whitespace should be preserved', t => {
+test('trim:left should remove leading whitespace, and trailing whitespace should be preserved', (t) => {
   t.strictSame(result.trimLeft, expected.trimLeft)
   t.end()
 })
 
-test('trim:both should remove all leading and trailing whitespace', t => {
+test('trim:both should remove all leading and trailing whitespace', (t) => {
   t.strictSame(result.trimBoth, expected.trimBoth)
   t.end()
 })
 
-test('trim without arguments should default to trim:both', t => {
+test('trim without arguments should default to trim:both', (t) => {
   t.strictSame(result.trimAlone, expected.trimAlone)
   t.strictSame(result.trimAlone, result.trimBoth)
   t.end()
 })
 
-test('prefix should prefix text', t => {
+test('prefix should prefix text', (t) => {
   t.strictSame(result.prefix, expected.prefix)
   t.end()
 })
 
-test('suffix should suffix text', t => {
+test('suffix should suffix text', (t) => {
   t.strictSame(result.suffix, expected.suffix)
   t.end()
 })
 
-test('order of prefix and suffix filters should not matter', t => {
+test('order of prefix and suffix filters should not matter', (t) => {
   t.strictSame(result.prefixAndSuffix, expected.prefixAndSuffix)
   t.strictSame(result.suffixAndPrefix, expected.suffixAndPrefix)
   t.strictSame(result.prefixAndSuffix, result.suffixAndPrefix)
