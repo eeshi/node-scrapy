@@ -3,13 +3,9 @@
 # top-most EditorConfig file
 root = true
 
-# Unix-style newlines with a newline ending every file
 [*]
 end_of_line = lf
-insert_final_newline = true
-
-# Two spaces identation for javascript, JSON and HTML files
-[*.{js,json,html}]
-indent_style = space
 indent_size = 2
+indent_style = space
+insert_final_newline = true
 trim_trailing_whitespace = true
