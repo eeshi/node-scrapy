@@ -42,9 +42,9 @@
   "license": "MIT",
   "homepage": "https://github.com/eeshi/node-scrapy",
   "readmeFilename": "README.md",
-  "engines": [
-    "node >= 4.0.0"
-  ],
+  "engines": {
+    "node": ">=6.9.0"
+  },
   "main": "lib/index.js",
   "dependencies": {
     "css-select": "^1.2.0",
