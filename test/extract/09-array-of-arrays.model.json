@@ -1,8 +1,4 @@
 {
   "list-title": "title",
-  "polygons": [".polygon",
-    [".points > li",
-      ["strong"]
-    ]
-  ]
+  "polygons": [".polygon", [".points > li", ["strong"]]]
 }

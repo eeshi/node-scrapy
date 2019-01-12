@@ -1,4 +1,4 @@
-const test = require('tap').test
+const { test } = require('tap')
 const parse = require('../lib/query-parser')
 
 test('should extract CSS selector from query and keep it intact', (t) => {

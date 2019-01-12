@@ -1,13 +1,9 @@
-const test = require('tap').test
+const { test } = require('tap')
 const scrapy = require('../..')
 
 const { getFixtureSet } = require('../test-utils')
 
-const {
-  source,
-  model,
-  expected
-} = getFixtureSet(__dirname, __filename)
+const { source, model, expected } = getFixtureSet(__dirname, __filename)
 
 const result = scrapy.extract(source, model)
 

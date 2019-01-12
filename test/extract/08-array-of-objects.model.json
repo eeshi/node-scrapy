@@ -1,6 +1,7 @@
 {
   "list-title": "title",
-  "people": [".person",
+  "people": [
+    ".person",
     {
       "name": ".name",
       "birthday": ".birthday",
