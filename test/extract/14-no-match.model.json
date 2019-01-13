@@ -1,0 +1,14 @@
+{
+  "missing": ".non-existent",
+  "manyMissing": [".non-existent"],
+  "missingInObject": {
+    "missing": ".non-existent",
+    "manyMissing": [".non-existent"],
+    "missingNested": [".non-existent", {
+      "totallyMissing": ".non-existent"
+    }],
+    "nestedButEmpty": [".empty", {
+      "totallyMissing": ".non-existent"
+    }]
+  }
+}
