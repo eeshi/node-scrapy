@@ -27,16 +27,16 @@
   "main": "lib/index.js",
   "dependencies": {
     "css-select": "^2.0.2",
-    "dom-serializer": "^0.1.0",
-    "htmlparser2": "^3.10.0"
+    "dom-serializer": "^0.1.1",
+    "htmlparser2": "^3.10.1"
   },
   "devDependencies": {
-    "echint": "^4.0.1",
-    "eslint": "^5.12.0",
+    "echint": "^4.0.2",
+    "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-import": "^2.16.0",
     "prettier-eslint-cli": "^4.7.1",
-    "tap": "^12.1.1"
+    "tap": "^12.6.1"
   },
   "scripts": {
     "format": "prettier-eslint --write '{lib,test}/**/*.{js,json}'",
