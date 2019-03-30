@@ -22,3 +22,8 @@ build
 
 node_modules
 .nyc_output
+
+## Lock files
+
+package-lock.json
+yarn.lock
