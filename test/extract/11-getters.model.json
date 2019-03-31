@@ -2,10 +2,8 @@
   "pageTitle": "title",
   "default": ".main-p",
   "textContent": ".main-p => $textContent",
-  "text": ".main-p => $text",
   "textNodes": ".main-p => $textNodes",
   "links": ["a => href"],
   "outerHTML": ".main-p => $outerHTML",
-  "html": ".main-p => $html",
   "innerHTML": ".main-p => $innerHTML"
 }

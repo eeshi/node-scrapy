@@ -45,7 +45,7 @@ const model = {
   files: [
     '.js-navigation-item .content',
     {
-      name: 'a => $text',
+      name: 'a => $textContent',
       url: 'a => href',
     },
   ],

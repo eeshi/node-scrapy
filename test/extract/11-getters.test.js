@@ -14,12 +14,6 @@ test('default getter should be $textContent', (t) => {
   t.end()
 })
 
-test('$text should be an alias of $textContent', (t) => {
-  t.strictSame(result.text, expected.text)
-  t.strictSame(result.text, result.textContent)
-  t.end()
-})
-
 test('$textNodes should only count for direct child nodes', (t) => {
   t.strictSame(result.textNodes, expected.textNodes)
   t.end()
@@ -32,12 +26,6 @@ test('should return matching attribute if getter is not one of the getters colle
 
 test('$outerHTML should return outer HTML of selected element', (t) => {
   t.strictSame(result.outerHTML, expected.outerHTML)
-  t.end()
-})
-
-test('$html should be an alias for $outerHTML', (t) => {
-  t.strictSame(result.html, expected.html)
-  t.strictSame(result.html, expected.outerHTML)
   t.end()
 })
 

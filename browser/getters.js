@@ -66,10 +66,8 @@ function getTextNodes(dom) {
 
 module.exports = {
   attribute: getAttribute,
-  $html: getOuterHTML,
   $innerHTML: getInnerHTML,
   $outerHTML: getOuterHTML,
-  $text: getTextContent,
   $textContent: getTextContent,
   $textNodes: getTextNodes,
 }

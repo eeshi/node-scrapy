@@ -9,7 +9,7 @@ test('should extract CSS selector from query and keep it intact', (t) => {
 })
 
 test('should extract CSS selector from query and keep it intact, even if getter query is present', (t) => {
-  const query = '.home li > a => $text'
+  const query = '.home li > a => $textContent'
   const result = parseQuery(query)
   t.strictSame(result.selector, '.home li > a')
   t.end()
@@ -23,7 +23,7 @@ test('should extract CSS selector from query and keep it intact, even if filter 
 })
 
 test('should extract CSS selector from query and keep it intact, even if getter and filter queries are present', (t) => {
-  const query = '.home li > a => $text | trim:both'
+  const query = '.home li > a => $textContent | trim:both'
   const result = parseQuery(query)
   t.strictSame(result.selector, '.home li > a')
   t.end()
