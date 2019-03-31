@@ -104,7 +104,7 @@ npm install node-scrapy
 
 ## Features
 
-🍠 **Simple**: No XPaths. No complex object inheritance. No extensive config files. Just JSON and the CSS selectors you're used to. Simple as [potatoes](http://youtu.be/efMHLkyb7ho).
+🍠 **Simple**: No XPaths. No complex object inheritance. No extensive config files. Just JSON and the CSS selectors you're used to. Simple as [potatoes](https://youtu.be/efMHLkyb7ho).
 
 ⚡ **Lightweight:** node-scrapy relies on [htmlparser2](https://www.npmjs.org/package/htmlparser2) and [css-select](https://www.npmjs.org/package/css-select), known for [being fast](https://travis-ci.org/AndreasMadsen/htmlparser-benchmark/builds/10805007).
 
