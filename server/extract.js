@@ -1,9 +1,12 @@
 const cssSelect = require('css-select')
 const { DomHandler, Parser } = require('htmlparser2')
 
-const { ModelError } = require('./errors')
-const { extractItem } = require('./extractItem')
-const { DOMHANDLER_OPTIONS, HTMLPARSER2_OPTIONS } = require('./options')
+const { ModelError } = require('../lib/errors')
+const { extractItem } = require('../lib/extractItem')
+const filters = require('../lib/filters')
+const { DOMHANDLER_OPTIONS, HTMLPARSER2_OPTIONS } = require('../lib/options')
+
+const getters = require('./getters')
 
 /**
  * Given an `html` string, extract data as described in the `model`.
@@ -34,7 +37,7 @@ function extract(html, model, options = {}) {
 
   parser.end(html)
 
-  return extractItem(handler.dom, deserializedModel, cssSelect)
+  return extractItem(handler.dom, deserializedModel, cssSelect, getters, filters)
 }
 
 module.exports = {

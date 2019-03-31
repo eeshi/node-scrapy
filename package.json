@@ -24,22 +24,41 @@
   "engines": {
     "node": ">=8.9.0"
   },
-  "main": "lib/index.js",
+  "main": "server/index.js",
+  "browser": "dist/browser.umd.min.js",
   "dependencies": {
     "css-select": "^2.0.2",
+    "css-select-browser-adapter": "^0.1.2",
     "dom-serializer": "^0.1.1",
     "htmlparser2": "^3.10.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
     "echint": "^4.0.2",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.16.0",
     "prettier-eslint-cli": "^4.7.1",
-    "tap": "^12.6.1"
+    "rollup": "^1.7.4",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "^9.2.2",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^4.0.1",
+    "tap": "^12.6.1",
+    "terser": "^3.17.0"
+  },
+  "echint": {
+    "ignore": [
+      "coverage/**",
+      "dist/**",
+      ".nyc-output/**"
+    ]
   },
   "sideEffects": false,
   "scripts": {
+    "prebuild": "mkdir -p dist/",
+    "build": "rollup -c -f umd browser/index.js | tee dist/browser.umd.js | terser > dist/browser.umd.min.js",
     "format": "prettier-eslint --write '{lib,test}/**/*.{js,json}'",
     "test": "echint && eslint . && tap 'test/**/*.test.js'"
   }
