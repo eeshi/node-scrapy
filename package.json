@@ -38,6 +38,7 @@
     "prettier-eslint-cli": "^4.7.1",
     "tap": "^12.6.1"
   },
+  "sideEffects": false,
   "scripts": {
     "format": "prettier-eslint --write '{lib,test}/**/*.{js,json}'",
     "test": "echint && eslint . && tap 'test/**/*.test.js'"
