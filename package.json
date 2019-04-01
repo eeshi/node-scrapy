@@ -73,6 +73,7 @@
     "grammar": "npx nearleyc lib/query-parser.ne -o dist/grammar.js",
     "format": "prettier-eslint --write './**/*.{js,json,md}'",
     "pretest": "npm run grammar",
-    "test": "echint && eslint . && tap 'test/**/*.test.js'"
+    "test": "echint && eslint . && tap 'test/**/*.test.js'",
+    "prepublish": "npm run build"
   }
 }
