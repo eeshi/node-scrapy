@@ -30,7 +30,8 @@
     "css-select": "^2.0.2",
     "css-select-browser-adapter": "^0.1.2",
     "dom-serializer": "^0.1.1",
-    "htmlparser2": "^3.10.1"
+    "htmlparser2": "^3.10.1",
+    "nearley": "^2.16.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
@@ -57,9 +58,12 @@
   },
   "sideEffects": false,
   "scripts": {
-    "prebuild": "mkdir -p dist/",
+    "prebuild": "npm run grammar",
     "build": "rollup -c -f umd browser/index.js | tee dist/browser.umd.js | terser > dist/browser.umd.min.js",
-    "format": "prettier-eslint --write '{lib,test}/**/*.{js,json}'",
+    "pregrammar": "mkdir -p dist/",
+    "grammar": "npx nearleyc lib/query-parser.ne -o dist/grammar.js",
+    "format": "prettier-eslint --write './**/*.{js,json,md}'",
+    "pretest": "npm run grammar",
     "test": "echint && eslint . && tap 'test/**/*.test.js'"
   }
 }

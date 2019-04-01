@@ -43,9 +43,8 @@ test('should extract `getter` from query if present', (t) => {
   t.end()
 })
 
-test('should ignore whitespace around and in between `getter`', (t) => {
-  const query = `.home li > a =>   hr e
-    f  `
+test('should ignore whitespace around `getter`', (t) => {
+  const query = '.home li > a =>   href  '
   const result = parseQuery(query)
   t.strictSame(result.getter, 'href')
   t.end()
@@ -73,12 +72,19 @@ test('should extract all filter names in order', (t) => {
   t.end()
 })
 
-test("should extract filters' arguments as strings", (t) => {
-  const query = '.home li > a | trim:right | someFilter:true | anotherFilter:test'
+test("should extract filters' argument as strings when quoted", (t) => {
+  const query = '.home li > a | trim:"right" | anotherFilter:"test"'
   const result = parseQuery(query)
   t.strictSame(result.filters[0].args[0], 'right')
-  t.strictSame(result.filters[1].args[0], 'true')
-  t.strictSame(result.filters[2].args[0], 'test')
+  t.strictSame(result.filters[1].args[0], 'test')
+  t.end()
+})
+
+test("should extract filters' argument symbos as strings", (t) => {
+  const query = '.home li > a | trim:right | anotherFilter:test'
+  const result = parseQuery(query)
+  t.strictSame(result.filters[0].args[0], 'right')
+  t.strictSame(result.filters[1].args[0], 'test')
   t.end()
 })
 
