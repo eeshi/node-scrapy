@@ -12,11 +12,11 @@
     "scrapy",
     "crawler"
   ],
-  "version": "0.4.0-alpha.1",
+  "version": "0.4.0-beta.1",
   "author": "Stefan Maric <me@stefanmaric.com>",
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/eeshi/node-scrapy.git"
+    "type": "git",
+    "url": "https://github.com/eeshi/node-scrapy.git"
   },
   "bugs": {
     "url": "https://github.com/eeshi/node-scrapy/issues"
