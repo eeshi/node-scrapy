@@ -29,6 +29,12 @@
   },
   "main": "server/index.js",
   "browser": "dist/browser.umd.min.js",
+  "files": [
+    "browser/",
+    "dist/",
+    "lib/",
+    "server/"
+  ],
   "dependencies": {
     "css-select": "^2.0.2",
     "css-select-browser-adapter": "^0.1.2",
