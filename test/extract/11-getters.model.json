@@ -1,9 +1,9 @@
 {
   "pageTitle": "title",
   "default": ".main-p",
-  "textContent": ".main-p => $textContent",
-  "textNodes": ".main-p => $textNodes",
-  "links": ["a => href"],
-  "outerHTML": ".main-p => $outerHTML",
-  "innerHTML": ".main-p => $innerHTML"
+  "textContent": ".main-p ($textContent)",
+  "textNodes": ".main-p ($textNodes)",
+  "links": ["a (href)"],
+  "outerHTML": ".main-p ($outerHTML)",
+  "innerHTML": ".main-p ($innerHTML)"
 }

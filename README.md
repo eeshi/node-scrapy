@@ -32,14 +32,14 @@ const model = {
   author: '.author',
   repo: '[itemprop="name"]',
   stats: {
-    commits: '.numbers-summary > li:nth-child(1) .num | trim',
-    branches: '.numbers-summary > li:nth-child(2) .num | trim',
-    releases: '.numbers-summary > li:nth-child(3) .num | trim',
-    contributors: '.numbers-summary > li:nth-child(4) .num | trim',
+    commits: '.numbers-summary > li:nth-child(1) .num',
+    branches: '.numbers-summary > li:nth-child(2) .num',
+    releases: '.numbers-summary > li:nth-child(3) .num',
+    contributors: '.numbers-summary > li:nth-child(4) .num',
     social: {
-      watch: '.pagehead-actions > li:nth-child(1) .social-count | trim',
-      stars: '.pagehead-actions > li:nth-child(2) .social-count | trim',
-      forks: '.pagehead-actions > li:nth-child(3) .social-count | trim',
+      watch: '.pagehead-actions > li:nth-child(1) .social-count',
+      stars: '.pagehead-actions > li:nth-child(2) .social-count',
+      forks: '.pagehead-actions > li:nth-child(3) .social-count',
     },
   },
   files: [

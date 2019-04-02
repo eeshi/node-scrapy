@@ -4,34 +4,13 @@
   const join = d => prune(d).join('')
 %}
 
-MAIN ->
-    EXTENDED_QUERY {% id %}
-  | SIMPLE_QUERY {% id %}
-
-EXTENDED_QUERY -> CSS_COMBINATOR __ QUERY_EXTENSION _ {% d => ({
-  selector: d[0],
-  getter: d[2].getter,
-  filters: d[2].filters
-}) %}
-
-SIMPLE_QUERY -> CSS_COMBINATOR {% d => ({
-  selector: d[0],
-  getter: null,
-  filters: [],
-})%}
-
-QUERY_EXTENSION ->
-    GETTER {% d => ({ getter: d[0], filters: [] }) %}
-  | FILTER_LIST {% d => ({ getter: null, filters: d[0] }) %}
-  | GETTER __ FILTER_LIST {% d => ({ getter: d[0], filters: d[2] }) %}
-
-GETTER -> "=>" __ IDENTIFIER {% d => d[2] %}
+MAIN -> IDENTIFIER _ FILTER_LIST:? {% d => ({ getter: d[0], filters: d[2] || [] }) %}
 
 FILTER_LIST ->
     FILTER
-  | FILTER_LIST __ FILTER {% d => flatten([d[0], d[2]]) %}
+  | FILTER_LIST _ FILTER {% d => flatten([d[0], d[2]]) %}
 
-FILTER -> "|" __ IDENTIFIER FILTER_ARG:* {% d => ({
+FILTER -> "|" _ IDENTIFIER FILTER_ARG:* {% d => ({
   name: d[2],
   args: d[3]
 }) %}
@@ -58,85 +37,7 @@ SYMBOL -> [a-zA-Z]:+ {% (d, loc, reject) => {
   return ["null", "true", "false"].includes(token) ? reject : token
 } %}
 
-
-# CSS selector grammar
-
-CSS_COMBINATOR ->
-    SELECTOR_BODY {% join %}
-  | CSS_COMBINATOR _ [><+~] _ SELECTOR_BODY {% join %}
-  | CSS_COMBINATOR __ SELECTOR_BODY {% join %}
-
-SELECTOR_BODY ->
-  BASE_SELECTOR PSEUDO_ELEMENT_SELECTOR:? {% join %}
-  | COMPOUND_SELECTOR PSEUDO_ELEMENT_SELECTOR:? {% join %}
-  | BASE_SELECTOR COMPOUND_SELECTOR PSEUDO_ELEMENT_SELECTOR:? {% join %}
-
-COMPOUND_SELECTOR ->
-    MODIFIER_SELECTOR {% join %}
-  | COMPOUND_SELECTOR MODIFIER_SELECTOR {% join %}
-
-MODIFIER_SELECTOR ->
-    ID_SELECTOR {% join %}
-  | CLASS_SELECTOR {% join %}
-  | ATTRIBUTE_VALUE_SELECTOR {% join %}
-  | ATTRIBUTE_PRESENCE_SELECTOR {% join %}
-  | PSEUDO_CLASS_SELECTOR {% join %}
-
-BASE_SELECTOR ->
-  TYPE_SELECTOR {% join %}
-  | UNIVERSAL_SELECTOR {% join %}
-
-UNIVERSAL_SELECTOR -> "*"
-
-TYPE_SELECTOR -> ATTRIBUTE_NAME {% join %}
-
-ID_SELECTOR -> "#" ATTRIBUTE_NAME {% join %}
-
-CLASS_SELECTOR -> "." CLASS_NAME {% join %}
-
-CLASS_NAME ->
-    NAME_START {% join %}
-  | "-" NAME_START NAME_BODY {% join %}
-  | NAME_START NAME_BODY {% join %}
-
-ATTRIBUTE_PRESENCE_SELECTOR -> "[" ATTRIBUTE_NAME "]" {% join %}
-
-ATTRIBUTE_VALUE_SELECTOR -> "[" ATTRIBUTE_NAME ATTRIBUTE_OPERATOR ATTRIBUTE_VALUE "]" {% join %}
-
-ATTRIBUTE_NAME ->
-    NAME_START {% join %}
-  | NAME_START NAME_BODY {% join %}
-
-ATTRIBUTE_OPERATOR ->
-    "="
-  | "~="
-  | "|="
-  | "^="
-  | "$="
-  | "*="
-
-ATTRIBUTE_VALUE ->
-    UNQUOTED_ATTRIBUTE_VALUE {% join %}
-  | STRING {% join %}
-
-UNQUOTED_ATTRIBUTE_VALUE -> [^\[\]"',= ]:+ {% join %}
-
-PSEUDO_ELEMENT_SELECTOR -> "::" PSEUDO_SELECTOR_NAME {% join %}
-
-PSEUDO_CLASS_SELECTOR ->
-    ":" PSEUDO_SELECTOR_NAME {% join %}
-  | ":" PSEUDO_SELECTOR_NAME "(" [^\(\)]:* ")" {% join %}
-
-PSEUDO_SELECTOR_NAME -> [a-zA-Z] NAME_BODY {% join %}
-
-NAME_START -> [_a-zA-Z] {% join %}
-
-NAME_BODY -> [a-zA-Z0-9-_]:+ {% join %}
-
-
-# Basic literal types
-
-NUMBER -> "-":? ("0" | [1-9] [0-9]:* ) ("." [0-9]:+ ):? ( [eE] [+-]:? [0-9]:+):? {%  d => {
+NUMBER -> "-":? ("0" | [1-9] [0-9]:* ) ("." [0-9]:+ ):? ( [eE] [+-]:? [0-9]:+):? {% d => {
   return Number.parseFloat(
     join(d)
   )
@@ -182,8 +83,6 @@ TRUE -> "true" {% () => true %}
 
 FALSE -> "false" {% () => false %}
 
-_ -> WSCHAR:* {% join %}
-
-__ -> WSCHAR:+ {% join %}
+_ -> WSCHAR:* {% d => d[0] ? ' ' : null %}
 
 WSCHAR -> [ \t\n\v\f] {% join %}
