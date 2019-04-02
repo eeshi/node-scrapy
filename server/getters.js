@@ -58,6 +58,7 @@ function getInnerHTML(dom) {
 
 module.exports = {
   attribute: getAttribute,
+  $: getTextContent,
   $innerHTML: getInnerHTML,
   $outerHTML: getOuterHTML,
   $textContent: getTextContent,
