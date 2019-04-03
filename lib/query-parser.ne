@@ -24,18 +24,9 @@ ID_START -> [a-zA-Z$_] {% id %}
 VALUE ->
     NUMBER {% id %}
   | STRING {% id %}
-  | LITERAL {% id %}
-
-LITERAL ->
-    NULL {% id %}
-  | TRUE {% id %}
-  | FALSE {% id %}
   | SYMBOL {% id %}
 
-SYMBOL -> [a-zA-Z]:+ {% (d, loc, reject) => {
-  const token = join(d)
-  return ["null", "true", "false"].includes(token) ? reject : token
-} %}
+SYMBOL -> [a-zA-Z]:+ {% join %}
 
 NUMBER -> "-":? ("0" | [1-9] [0-9]:* ) ("." [0-9]:+ ):? ( [eE] [+-]:? [0-9]:+):? {% d => {
   return Number.parseFloat(
@@ -76,12 +67,6 @@ ESCAPED_CHAR ->
   } %}
 
 HEX -> [0-9a-fA-F] {% id %}
-
-NULL -> "null" {% () => null %}
-
-TRUE -> "true" {% () => true %}
-
-FALSE -> "false" {% () => false %}
 
 _ -> WSCHAR:* {% d => d[0] ? ' ' : null %}
 
