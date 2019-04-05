@@ -38,35 +38,17 @@ STRING ->
     SINGLE_QUOTE_STRING {% id %}
   | DOUBLE_QUOTE_STRING {% id %}
 
-SINGLE_QUOTE_STRING -> "'"  SINGLE_QUOTE_CHAR:* "'"  {% d => join(d[1]) %}
+SINGLE_QUOTE_STRING -> "'" SINGLE_QUOTE_CHAR:* "'" {% d => join(d[1]) %}
 
-DOUBLE_QUOTE_STRING -> "\""  DOUBLE_QUOTE_CHAR:* "\""  {% d => join(d[1]) %}
+DOUBLE_QUOTE_STRING -> "\"" DOUBLE_QUOTE_CHAR:* "\"" {% d => join(d[1]) %}
 
 SINGLE_QUOTE_CHAR ->
-    ESCAPED_CHAR {% id %}
-  | [^'\\] {% id %}
+    [^'] {% id %}
   | "\\'" {% () => "'" %}
 
 DOUBLE_QUOTE_CHAR ->
-    ESCAPED_CHAR {% id %}
-  | [^"\\] {% id %}
+    [^"] {% id %}
   | "\\\"" {% () => '"' %}
-
-ESCAPED_CHAR ->
-    "\\\\" {% () => '\\' %}
-  | "\\/" {% () => '/' %}
-  | "\\n" {% () => '\n' %}
-  | "\\b" {% () => '\b' %}
-  | "\\f" {% () => '\f' %}
-  | "\\r" {% () => '\r' %}
-  | "\\t" {% () => '\t' %}
-  | "\\u" HEX HEX HEX HEX {% d => {
-    const point = Number.parseInt(join(d.slice(1)), 16)
-    if (point === 92) return '\\'
-    return String.fromCodePoint(point)
-  } %}
-
-HEX -> [0-9a-fA-F] {% id %}
 
 _ -> WSCHAR:* {% d => d[0] ? ' ' : null %}
 
