@@ -70,6 +70,6 @@
     "format": "prettier --write './**/*.{js,json,md}' && eslint --quiet --fix './**/*.js'",
     "pretest": "npm run grammar",
     "test": "eslint . && tap 'test/**/*.test.js'",
-    "prepublish": "npm run build"
+    "prepare": "npm run build"
   }
 }
