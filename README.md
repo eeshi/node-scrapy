@@ -9,11 +9,11 @@ const scrapy = require('node-scrapy')
 const fetch = require('node-fetch')
 
 const url = 'https://github.com/expressjs/express'
-const model = '[itemprop="about"]'
+const model = '.mb-3.h4 + .f4.mt-3'
 
 fetch(url)
-  .then(res => res.text())
-  .then(body => {
+  .then((res) => res.text())
+  .then((body) => {
     console.log(scrapy.extract(body, model))
   })
   .catch(console.error)
@@ -24,39 +24,39 @@ fetch(url)
 node-scrapy can resolve complex objects. Give it a data model:
 
 ```javascript
-const scrapy = require('.')
 const fetch = require('node-fetch')
 
 const url = 'https://github.com/strongloop/express'
 const model = {
-  author: '.author',
-  repo: '[itemprop="name"]',
+  author: '.author ($ | trim)',
+  repo: '[itemprop="name"] ($ | trim)',
   stats: {
-    commits: '.numbers-summary > li:nth-child(1) .num',
-    branches: '.numbers-summary > li:nth-child(2) .num',
-    releases: '.numbers-summary > li:nth-child(3) .num',
-    contributors: '.numbers-summary > li:nth-child(4) .num',
+    commits: '.js-details-container > div:last-child strong',
+    branches: '.octicon-git-branch + strong',
+    releases: 'a[href$="/releases"] > span',
+    contributors: 'a[href$="/graphs/contributors"] > span',
     social: {
-      watch: '.pagehead-actions > li:nth-child(1) .social-count',
-      stars: '.pagehead-actions > li:nth-child(2) .social-count',
-      forks: '.pagehead-actions > li:nth-child(3) .social-count',
+      watch: '.pagehead-actions > li:nth-child(1) .social-count ($ | trim)',
+      stars: '.pagehead-actions > li:nth-child(2) .social-count ($ | trim)',
+      forks: '.pagehead-actions > li:nth-child(3) .social-count ($ | trim)',
     },
   },
   files: [
-    '.js-navigation-item .content',
+    '.js-active-navigation-container .Box-row > :nth-child(2)',
     {
-      name: 'a => $textContent',
-      url: 'a => href',
+      name: 'a',
+      url: 'a (href)',
     },
   ],
 }
 
 fetch(url)
-  .then(res => res.text())
-  .then(body => {
+  .then((res) => res.text())
+  .then((body) => {
     console.log(scrapy.extract(body, model))
   })
   .catch(console.error)
+
 ```
 
 ...and Scrapy will return:
@@ -66,19 +66,24 @@ fetch(url)
   author: 'expressjs',
   repo: 'express',
   stats: {
-    commits: '5,308',
-    branches: '13',
-    releases: '262',
-    contributors: '199',
-    social: { watch: '1,626', stars: '30,260', forks: '5,531' },
+    commits: '5,592',
+    branches: '9',
+    releases: '280',
+    contributors: '261',
+    social: { watch: '1.8k', stars: '49.8k', forks: '8.3k' }
   },
   files: [
     { name: 'benchmarks', url: '/expressjs/express/tree/master/benchmarks' },
     { name: 'examples', url: '/expressjs/express/tree/master/examples' },
     { name: 'lib', url: '/expressjs/express/tree/master/lib' },
     { name: 'test', url: '/expressjs/express/tree/master/test' },
+    { name: '.editorconfig', url: '/expressjs/express/blob/master/.editorconfig' },
+    { name: '.eslintignore', url: '/expressjs/express/blob/master/.eslintignore' },
+    { name: '.eslintrc.yml', url: '/expressjs/express/blob/master/.eslintrc.yml' },
     { name: '.gitignore', url: '/expressjs/express/blob/master/.gitignore' },
     { name: '.travis.yml', url: '/expressjs/express/blob/master/.travis.yml' },
+    { name: 'Charter.md', url: '/expressjs/express/blob/master/Charter.md' },
+    { name: 'Code-Of-Conduct.md', url: '/expressjs/express/blob/master/Code-Of-Conduct.md' },
     { name: 'Collaborator-Guide.md', url: '/expressjs/express/blob/master/Collaborator-Guide.md' },
     { name: 'Contributing.md', url: '/expressjs/express/blob/master/Contributing.md' },
     { name: 'History.md', url: '/expressjs/express/blob/master/History.md' },
@@ -87,11 +92,13 @@ fetch(url)
     { name: 'Readme.md', url: '/expressjs/express/blob/master/Readme.md' },
     { name: 'Release-Process.md', url: '/expressjs/express/blob/master/Release-Process.md' },
     { name: 'Security.md', url: '/expressjs/express/blob/master/Security.md' },
+    { name: 'Triager-Guide.md', url: '/expressjs/express/blob/master/Triager-Guide.md' },
     { name: 'appveyor.yml', url: '/expressjs/express/blob/master/appveyor.yml' },
     { name: 'index.js', url: '/expressjs/express/blob/master/index.js' },
-    { name: 'package.json', url: '/expressjs/express/blob/master/package.json' },
-  ],
+    { name: 'package.json', url: '/expressjs/express/blob/master/package.json' }
+  ]
 }
+
 ```
 
 For more examples, check the [test folder](./test).
