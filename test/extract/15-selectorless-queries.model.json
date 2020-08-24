@@ -1,0 +1,9 @@
+{
+  "items": [
+    ".some-list > li",
+    {
+      "label": ".title",
+      "value": "($textNodes | trim)"
+    }
+  ]
+}

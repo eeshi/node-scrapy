@@ -1,0 +1,8 @@
+{
+  "items": [
+    { "label": "Name", "value": "James Heather" },
+    { "label": "Sex", "value": "Male" },
+    { "label": "Age", "value": "46" },
+    { "label": "Resume", "value": "General Manager" }
+  ]
+}
