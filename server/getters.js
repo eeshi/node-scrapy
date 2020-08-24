@@ -1,4 +1,4 @@
-const getOuterHTML = require('dom-serializer')
+const { default: getOuterHTML} = require('dom-serializer')
 
 /**
  * Get the outer HTML of the given node.

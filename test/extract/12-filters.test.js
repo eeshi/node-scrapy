@@ -1,6 +1,6 @@
 const { test } = require('tap')
 
-const scrapy = require('../../server/')
+const scrapy = require('../../server')
 
 const { getFixtureSet } = require('../test-utils')
 

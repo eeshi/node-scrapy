@@ -1,4 +1,3 @@
-
 /**
  * Get the outer HTML of the given node.
  * See: https://developer.mozilla.org/en-US/docs/Web/API/Element/outerHTML

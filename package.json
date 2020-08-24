@@ -38,25 +38,29 @@
   "dependencies": {
     "css-select": "^2.0.2",
     "css-select-browser-adapter": "^0.1.2",
-    "dom-serializer": "^0.1.1",
-    "htmlparser2": "^3.10.1",
+    "dom-serializer": "^1.0.1",
+    "htmlparser2": "^4.1.0",
     "nearley": "^2.16.0"
   },
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
+    "@stefanmaric/eslint-config-munchies-base": "^0.3.0",
+    "@stefanmaric/eslint-config-munchies-gourmet": "^0.3.0",
+    "@stefanmaric/eslint-config-munchies-modern": "^0.3.0",
+    "babel-eslint": "^10.1.0",
     "echint": "^4.0.2",
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint": "^7.7.0",
+    "eslint-import-resolver-node": "^0.3.4",
     "eslint-plugin-import": "^2.16.0",
-    "prettier-eslint-cli": "^4.7.1",
-    "rollup": "^1.7.4",
+    "prettier": "^2.0.5",
+    "rollup": "^2.26.5",
     "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^9.2.2",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^4.0.1",
-    "tap": "^12.6.1",
-    "terser": "^3.17.0"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "tap": "^14.10.8",
+    "terser": "^5.2.1"
   },
   "echint": {
     "ignore": [
@@ -71,7 +75,7 @@
     "build": "rollup -c -f umd browser/index.js | tee dist/browser.umd.js | terser > dist/browser.umd.min.js",
     "pregrammar": "mkdir -p dist/",
     "grammar": "npx nearleyc lib/query-parser.ne -o dist/grammar.js",
-    "format": "prettier-eslint --write './**/*.{js,json,md}'",
+    "format": "prettier --write './**/*.{js,json,md}' && eslint --quiet --fix './**/*.js'",
     "pretest": "npm run grammar",
     "test": "echint && eslint . && tap 'test/**/*.test.js'",
     "prepublish": "npm run build"
