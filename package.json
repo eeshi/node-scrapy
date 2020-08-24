@@ -45,6 +45,10 @@
   "devDependencies": {
     "@babel/core": "^7.4.0",
     "@babel/preset-env": "^7.4.2",
+    "@rollup/plugin-babel": "^5.2.0",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
     "@stefanmaric/eslint-config-munchies-base": "^0.3.0",
     "@stefanmaric/eslint-config-munchies-gourmet": "^0.3.0",
     "@stefanmaric/eslint-config-munchies-modern": "^0.3.0",
@@ -54,10 +58,6 @@
     "eslint-plugin-import": "^2.16.0",
     "prettier": "^2.0.5",
     "rollup": "^2.26.5",
-    "rollup-plugin-babel": "^4.3.2",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-json": "^4.0.0",
-    "rollup-plugin-node-resolve": "^5.2.0",
     "tap": "^14.10.8",
     "terser": "^5.2.1"
   },
