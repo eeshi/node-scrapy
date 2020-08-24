@@ -49,7 +49,6 @@
     "@stefanmaric/eslint-config-munchies-gourmet": "^0.3.0",
     "@stefanmaric/eslint-config-munchies-modern": "^0.3.0",
     "babel-eslint": "^10.1.0",
-    "echint": "^4.0.2",
     "eslint": "^7.7.0",
     "eslint-import-resolver-node": "^0.3.4",
     "eslint-plugin-import": "^2.16.0",
@@ -62,13 +61,6 @@
     "tap": "^14.10.8",
     "terser": "^5.2.1"
   },
-  "echint": {
-    "ignore": [
-      "coverage/**",
-      "dist/**",
-      ".nyc-output/**"
-    ]
-  },
   "sideEffects": false,
   "scripts": {
     "prebuild": "npm run grammar",
@@ -77,7 +69,7 @@
     "grammar": "npx nearleyc lib/query-parser.ne -o dist/grammar.js",
     "format": "prettier --write './**/*.{js,json,md}' && eslint --quiet --fix './**/*.js'",
     "pretest": "npm run grammar",
-    "test": "echint && eslint . && tap 'test/**/*.test.js'",
+    "test": "eslint . && tap 'test/**/*.test.js'",
     "prepublish": "npm run build"
   }
 }
