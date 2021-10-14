@@ -17,7 +17,7 @@ FILTER -> "|" _ IDENTIFIER FILTER_ARG:* {% d => ({
 
 FILTER_ARG -> ":" VALUE {% d => d[1] %}
 
-IDENTIFIER -> ID_START [a-zA-Z0-9_$]:* {% join %}
+IDENTIFIER -> ID_START [a-zA-Z0-9_$-]:* {% join %}
 
 ID_START -> [a-zA-Z$_] {% id %}
 
